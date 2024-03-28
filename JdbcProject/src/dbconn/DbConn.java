@@ -15,6 +15,8 @@ public class DbConn {
         User user = new User();
         //Class.forName("oracle.jdbc.driver.OracleDriver");
         conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","acos","1234");
+        // 학원에서는 @~: 사이의 값을 192.168.10.17 로 변경해서 쓰고,
+        // 집에서는 loaclhost 로 변경해서 table 직접 만들어서 써야함.
         stmt = conn.createStatement();
         String query = "SELECT * FROM usertb";
 
