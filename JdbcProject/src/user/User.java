@@ -1,11 +1,11 @@
 package user;
 
 public class User {
-    String id;
-    String password;
-    String name;
-    String question;
-    String answer;
+    private String id;
+    private String password;
+    private String name;
+    private String question;
+    private String answer;
 
     public String getId() {
         return id;
