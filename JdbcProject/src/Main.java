@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         DbConn dbConn = new DbConn();
         try{
-            dbConn.selectAll();
+            dbConn.select("notusertb");
         }catch (SQLException e){
             e.printStackTrace();
         }
