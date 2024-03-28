@@ -1,6 +1,7 @@
 package dbconn;
 
-import emp.Emp;
+
+import user.User;
 
 import java.sql.*;
 
@@ -11,31 +12,22 @@ public class DbConn {
     ResultSet rs = null;
 
     public void selectAll() throws SQLException {
-        Emp emp = new Emp();
+        User user = new User();
         //Class.forName("oracle.jdbc.driver.OracleDriver");
-        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","SCOTT","1234");
+        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","acos","1234");
         stmt = conn.createStatement();
-        String query = "SELECT * FROM emp";
+        String query = "SELECT * FROM usertb";
 
         rs = stmt.executeQuery(query);
         while(rs.next()){
-            emp.setEmpno(rs.getInt("empno"));
-            emp.setEname(rs.getString("ename"));
-            emp.setJob(rs.getString("job"));
-            emp.setMgr(rs.getInt("mgr"));
-            emp.setHiredate(rs.getDate("hiredate"));
-            emp.setSal(rs.getInt("sal"));
-            emp.setComm(rs.getInt("comm"));
-            emp.setDeptno(rs.getInt("deptno"));
+            user.setId(rs.getString("id"));
+            user.setPassword(rs.getString("password"));
+            user.setName(rs.getString("name"));
+            user.setQuestion(rs.getString("question"));
+            user.setAnswer(rs.getString("answer"));
 
-            System.out.println("[empno : " +emp.getEmpno()
-                    +"] [ename : " + emp.getEname()
-                    +"] [job : " + emp.getJob()
-                    +"] [mgr : " + emp.getMgr()
-                    +"] [hiredate : " + emp.getHiredate()
-                    +"] [sal : " + emp.getSal()
-                    +"] [comm : " + emp.getComm()
-                    +"] [deptno : " + emp.getDeptno() + "]");
+            System.out.println("[id : "+ user.getId()
+                    + "] [name : "+user.getName() + "]");
         }
         rs.close();
         stmt.close();
