@@ -21,6 +21,8 @@ public class DbConn {
         String query = "SELECT * FROM " + table;
 
         rs = stmt.executeQuery(query);
+
+        // table 종류 : usertb, notusertb, qauser, qanotuser, enrolment, consulting, classtb
         switch (table) {
             case "usertb":
                 while (rs.next()) {
