@@ -44,7 +44,7 @@ public class DbConn {
                     nuser.setName(rs.getString("name"));
 
                     System.out.println("[PhoneNumber :"+ nuser.getPhoneNumber()
-                    +"] [name : "+nuser.getName() + "]");
+                            +"] [name : "+nuser.getName() + "]");
                 }
         }
         rs.close();
