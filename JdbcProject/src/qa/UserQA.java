@@ -1,12 +1,10 @@
 package qa;
 
-import dbconn.DbConn;
-
-import java.sql.*;
-import java.util.Scanner;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.*;
+import java.util.Scanner;
 
 public class UserQA {
     public static void main(String[] args) throws SQLException{
@@ -35,7 +33,7 @@ public class UserQA {
                 sc.nextLine();
                 String question = sc.nextLine();
 
-                // insert conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:xe","acos","1234");
+                // insert conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.10.17:xe","acos","1234");
 
                 System.out.println("질문이 저장되었습니다");
                 try {
@@ -43,14 +41,23 @@ public class UserQA {
                     bw.write(question);
                     bw.close();
 
-                } catch (IOException e) {
+                    Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.10.17:1521:xe", "acos", "1234");
+                    PreparedStatement pstmt = conn.prepareStatement("INSERT INTO QAuser (id, question) VALUES (?, ?)");
+                    pstmt.setString(1, "test");
+                    pstmt.setString(2, question);
+                    pstmt.executeUpdate();
+                    pstmt.close();
+                    conn.close();
+                    System.out.println("질문이 데이터베이스에 저장되었습니다");
+                } catch (IOException | SQLException e) {
                     System.out.println("질문 저장 실패 : " + e.getMessage());
                 }
+
             }
 
             else if (i == 3) {
                 sc.nextLine();
-                System.out.println("질문내역 확인"); // 과거에 한 질문을 어떻게 저장할 것이며 3번을 눌렀을경우 어떻게 불러올 것인가
+                System.out.println("질문내역 확인");
                 UserQA userqa1 = new UserQA();
                 String id = sc.nextLine();
                 System.out.println(userqa1.loadQA(id));
