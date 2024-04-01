@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class UserDAO {
     public static void main(String[] args) throws SQLException {
         UserDAO uDao = new UserDAO();
-        int i = uDao.findPassword("test2");
+        int i = uDao.withDraw("test4","1234");
         System.out.println(i);
     }
     Connection conn = null;
@@ -208,4 +208,38 @@ public class UserDAO {
         conn.close();
         return rrs;
     }
+
+
+    //회원 탈퇴
+    // 아이디, 비밀번호, 본인확인 질문 보여 준 뒤 답변 받고 맞으면
+    // return 0 -> 아이디, 비밀번호, 답변이 틀림
+    // return 1 -> 삭제완료
+    public int withDraw(String id, String password) throws SQLException{
+        int rrs = 0;
+        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
+        String q = "SELECT * FROM usertb WHERE id = ?";
+        pstmt = conn.prepareStatement(q);
+        pstmt.setString(1,id);
+        rs = pstmt.executeQuery();
+        if(rs.next()){
+            if(password.equals(rs.getString("password"))){
+                System.out.println("본인확인 질문 : "+rs.getString("question"));
+                System.out.print("답변 : ");
+                Scanner sc = new Scanner(System.in);
+                String answer = sc.nextLine();
+                if(rs.getString("answer").equals(answer)){
+                    System.out.println("회원 탈퇴를 하시려면 [D]를 입력하세요.");
+                    String delete = sc.nextLine().toLowerCase();
+                    if(delete.equals("d")){
+                        q = "DELETE FROM usertb WHERE id = ? ";
+                        pstmt = conn.prepareStatement(q);
+                        pstmt.setString(1,id);
+                        rrs = pstmt.executeUpdate();
+                    }
+                }
+            }
+        }
+        return rrs;
+    }
+
 }
