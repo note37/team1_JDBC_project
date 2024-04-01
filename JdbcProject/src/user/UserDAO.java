@@ -4,11 +4,6 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class UserDAO {
-    public static void main(String[] args) throws SQLException {
-        UserDAO uDao = new UserDAO();
-        int i = uDao.withDraw("test4","1234");
-        System.out.println(i);
-    }
     Connection conn = null;
     Statement stmt = null;
     PreparedStatement pstmt = null;

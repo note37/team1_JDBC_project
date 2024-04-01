@@ -1,14 +1,11 @@
 import dbconn.DbConn;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        DbConn dbConn = new DbConn();
-        try{
-            dbConn.select("notusertb");
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+        Scanner sc = new Scanner(System.in);
+
     }
 }
