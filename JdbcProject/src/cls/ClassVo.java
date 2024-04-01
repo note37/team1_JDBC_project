@@ -7,7 +7,7 @@ public class ClassVo {
     private int applicant; //신청 인원
     private int max; //제한 인원
     private int opennum; //수업 번호
-
+    private String applicantId;
     public ClassVo(int opennum, String title, String teacher, String room, int applicant, int max) {
         this.opennum = opennum;
         this.title = title;
@@ -15,8 +15,15 @@ public class ClassVo {
         this.room = room;
         this.applicant = applicant;
         this.max = max;
+        this.applicantId = applicantId;
+    }
+    public String getApplicantId() {
+        return applicantId;
     }
 
+    public void setApplicantId(String applicantId) {
+        this.applicantId = applicantId;
+    }
     public int getOpennum() {
         return opennum;
     }

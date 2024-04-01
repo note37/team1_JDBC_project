@@ -1,3 +1,5 @@
+import cls.ClassDao;
+import cls.ClassVo;
 import dbconn.DbConn;
 import user.NotUser;
 import user.NotUserDAO;
@@ -5,12 +7,14 @@ import user.User;
 import user.UserDAO;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
         Scanner sc = new Scanner(System.in);
         User user = null;
+        ClassDao dao = new ClassDao();
         NotUser nUser;
         System.out.println();
         System.out.println("========================================KH 정보 교육원========================================");
@@ -205,6 +209,35 @@ public class Main {
                         continue;
                     case 3:
                     case 4:
+                        while (true) {
+                            System.out.println("\n☆★☆★☆★☆★KH정보교육원 수강 신청 메뉴☆★☆★☆★☆★\n");
+                            System.out.print("메뉴 선택 : [1]수강신청 [2]수강 취소 [3]나의 수강신청 조회 [4]나가기 : ");
+                            int sel = sc.nextInt();
+                            switch (sel) {
+                                case 1:
+                                    System.out.println("\n현재 개설된 수업 목록입니다.");
+                                    System.out.println("--------------------------");
+                                    List<ClassVo> list = dao.ClassSelect();
+                                    dao.classSelectPrn(list);
+                                    System.out.println();
+                                    System.out.print("어떤 수업을 신청하시겠습니까?(번호로 입력하세요) : ");
+                                    int choice = sc.nextInt();
+                                    dao.applyForClass(choice, user.getId(), user.getName());
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    break;
+                                case 4:
+                                    return;
+
+
+                                default:
+                                    System.out.println("메뉴를 다시 선택하세요");
+                            }
+
+
+                        }
                     case 5:
                     case 6:
                         System.out.println("프로그램을 종료합니다.");

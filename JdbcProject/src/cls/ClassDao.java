@@ -49,26 +49,29 @@ public class ClassDao {
             System.out.print(e.getTitle() + " ");
             System.out.print(e.getTeacher() + " ");
             System.out.print(e.getRoom() + " ");
-            System.out.print("["+e.getApplicant()+"]/");
-            System.out.println("["+e.getMax()+"]");
+            System.out.print("[" + e.getApplicant() + "]/");
+            System.out.println("[" + e.getMax() + "]");
         }
     }
 
 
-    public void applyForClass(int openNum) {
+    public void applyForClass(int openNum, String userId, String userName) {
         try {
             // 데이터베이스 연결
-            DbConn.getConnection();
+            conn = DbConn.getConnection();
 
-            // SQL 쿼리문 작성: 선택한 수업 번호에 해당하는 수업의 현재 신청 인원과 최대 인원을 가져옴
-            String selectSql = "SELECT APPLICANT, MAX FROM ClassTb WHERE OPENNUM = ?";
+            // SQL 쿼리문 작성: 선택한 수업 번호에 해당하는 수업 정보 가져오기
+            String selectSql = "SELECT * FROM ClassTb WHERE OPENNUM = ?";
             pStmt = conn.prepareStatement(selectSql);
             pStmt.setInt(1, openNum);
             ResultSet rs = pStmt.executeQuery();
 
+            // 해당 수업 정보가 있는지 확인
             if (rs.next()) {
                 int currentApplicant = rs.getInt("APPLICANT");
                 int max = rs.getInt("MAX");
+                String title = rs.getString("TITLE");
+                String room = rs.getString("ROOM");
 
                 // 현재 신청 인원이 최대 인원을 초과하지 않으면
                 if (currentApplicant < max) {
@@ -81,6 +84,15 @@ public class ClassDao {
                     // 업데이트 결과에 따라 메시지 출력
                     if (result > 0) {
                         System.out.println("수업 신청이 완료되었습니다.");
+
+                        // SQL 쿼리문 작성: USERAPPLY 테이블에 수업 신청 정보 추가
+                        String insertSql = "INSERT INTO APPLYUSER (ID, NAME, TITLE, ROOM) VALUES (?, ?, ?, ?)";
+                        pStmt = conn.prepareStatement(insertSql);
+                        pStmt.setString(1, userId);
+                        pStmt.setString(2, userName); // 전달받은 userName 사용
+                        pStmt.setString(3, title);
+                        pStmt.setString(4, room);
+                        pStmt.executeUpdate();
                     } else {
                         System.out.println("수업 신청에 실패했습니다. 다시 시도해주세요.");
                     }
@@ -101,5 +113,4 @@ public class ClassDao {
             DbConn.close(conn);
         }
     }
-
 }
