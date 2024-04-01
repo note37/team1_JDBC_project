@@ -18,7 +18,7 @@ public class ClassDao {
     public List<ClassVo> ClassSelect() {
         List<ClassVo> list = new ArrayList<>();
         try {
-            conn = DbConn.getConnection("192.168.10.17");
+            conn = DbConn.getConnection();
             stmt = conn.createStatement();
             String sql = "SELECT * FROM ClassTb";
             rs = stmt.executeQuery(sql);
@@ -58,7 +58,7 @@ public class ClassDao {
     public void applyForClass(int openNum) {
         try {
             // 데이터베이스 연결
-            DbConn.getConnection("192.168.10.17");
+            DbConn.getConnection();
 
             // SQL 쿼리문 작성: 선택한 수업 번호에 해당하는 수업의 현재 신청 인원과 최대 인원을 가져옴
             String selectSql = "SELECT APPLICANT, MAX FROM ClassTb WHERE OPENNUM = ?";
