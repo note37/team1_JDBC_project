@@ -23,7 +23,6 @@ public class Main {
                 switch (signInSel){
                     case 1 :
                         uDao = new UserDAO();
-                        while(true) {
                             System.out.print("아이디 입력 : ");
                             String inputID = sc.nextLine();
                             if(inputID.getBytes().length>15){
@@ -48,8 +47,6 @@ public class Main {
                                     System.out.println("!예기치 않은 오류!");
                                     continue;
                             }
-                            break;
-                        }
                         break;
                     case 2 :
                         NotUserDAO nuDao = new NotUserDAO();
@@ -78,7 +75,7 @@ public class Main {
                         uDao = new UserDAO();
                         while(true) {
                             System.out.print("아이디 입력 : ");
-                            String inputID = sc.nextLine();
+                            inputID = sc.nextLine();
                             if (inputID.getBytes().length > 15) {
                                 System.out.println("너무 길어요");
                                 continue;
@@ -99,7 +96,7 @@ public class Main {
                         uDao = new UserDAO();
                         while(true){
                             System.out.print("비밀번호를 찾을 아이디 입력 : ");
-                            String inputID = sc.nextLine();
+                            inputID = sc.nextLine();
                             int findPwRst = uDao.findPassword(inputID);
                             if( findPwRst == 0) System.out.println("아이디가 없습니다.");
                             else{
@@ -132,22 +129,80 @@ public class Main {
                 System.out.println("[1]회원 탈퇴  [2]내 정보 수정  [3]상담  [4]수강  [5]Q&A  [6]종료");
                 int selNum = sc.nextInt();
                 sc.nextLine();
-                switch (selNum){
+                switch (selNum) {
                     case 1:
                         UserDAO uDao = new UserDAO();
-                        int wdRst = uDao.withDraw(user.getId(),user.getPassword());
-                        if(wdRst == 1){
+                        int wdRst = uDao.withDraw(user.getId(), user.getPassword());
+                        if (wdRst == 1) {
                             System.out.println("삭제 되었습니다.");
                             break;
-                        }
-                        else if(wdRst == 0){
+                        } else if (wdRst == 0) {
                             System.out.println("본인확인 답변이 틀렸습니다.");
                             continue;
-                        }else{
+                        } else {
                             System.out.println("삭제가 취소되었습니다.");
                             continue;
                         }
                     case 2:
+                        while (true){
+                            System.out.print("무엇을 변경하겠습니까? [1]이름  [2]비밀번호  [3]본인확인 답변");
+                            int updateUserSel = sc.nextInt();
+                            sc.nextLine();
+                            switch (updateUserSel) {
+                                case 1:
+                                    System.out.print("변경할 이름 입력 : ");
+                                    String updateName = sc.nextLine();
+                                    if(updateName.getBytes().length > 30){
+                                        System.out.println("이름이 너무 길어요");
+                                        continue;
+                                    }
+                                    user.setName(updateName);
+                                    break;
+                                case 2:
+                                    System.out.print("변경할 비밀번호 입력 : ");
+                                    String updatePw = sc.nextLine();
+                                    if(updatePw.getBytes().length>15){
+                                        System.out.println("비밀번호가 너무 길어요");
+                                        continue;
+                                    }
+                                    user.setPassword(updatePw);
+                                    break;
+                                case 3:
+                                    System.out.println("본인확인 질문 선택 \n" +
+                                            "[1]꿈이 뭔가요?\n" +
+                                            "[2]취미가 뭔가요?\n" +
+                                            "[3]가장 좋아하는 음식이 뭔가요?");
+                                    System.out.print("번호 입력 : ");
+                                    int selectQ = sc.nextInt();
+                                    String question = "";
+                                    switch (selectQ){
+                                        case 1 : question = "꿈이 뭔가요?"; break;
+                                        case 2 : question = "취미가 뭔가요?"; break;
+                                        case 3 : question = "가장 좋아하는 음식이 뭔가요?"; break;
+                                        default:
+                                            System.out.println("1~3번 중 선택 바랍니다.");
+                                            continue;
+                                    }
+                                    sc.nextLine();
+                                    System.out.print("답변 입력 : ");
+                                    String answer = sc.nextLine();
+                                    if(answer.length() > 10){
+                                        System.out.println("답변은 10자 이내로 입력 바랍니다.");
+                                        continue;
+                                    }
+                                    user.setQuestion(question);
+                                    user.setAnswer(answer);
+                                    break;
+                                default:
+                                    System.out.println("잘 못 입력하셨습니다.");
+                                    continue;
+                            }
+                            break;
+                        }
+                        System.out.println();
+                        System.out.println("=============== 변경되었습니다. ===============");
+                        System.out.println("유저 이름 : " + user.getName());
+                        continue;
                     case 3:
                     case 4:
                     case 5:
