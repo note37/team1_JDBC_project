@@ -13,12 +13,14 @@ public class UserDAO {
     Statement stmt = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-
+    String oracleURL = "jdbc:oracle:thin:@localhost:1521:xe";
+    String oracleID = "acos";
+    String oraclePW = "1234";
 
     // logIn -> ID, Password 입력
     // return 0 : ID 없음 / 1 : 성공 / 2 : 비밀 번호 틀림
     public int signIn(String id,String pw) throws SQLException {
-        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "acos", "1234");
+        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
         stmt = conn.createStatement();
         String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
         rs = stmt.executeQuery(q);
@@ -40,10 +42,11 @@ public class UserDAO {
         return rrs;
     }
 
+
     //회원가입 , ID 중복 확인 먼저 한 뒤 Password, 이름, 본인확인 질문, 답변 입력
     // return 0 -> ID 중복, return 1 -> 아이디 생성
     public int signUp(String id) throws SQLException{
-        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "acos", "1234");
+        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
         stmt = conn.createStatement();
         String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
         int rrs = 0;
@@ -147,7 +150,7 @@ public class UserDAO {
     //새 비밀번호 입력 후 변경
     // return 0 -> 아이디 없음, return 1 -> 수정완료
     public int findPassword(String id) throws SQLException{
-        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "acos", "1234");
+        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
         String q = "SELECT * FROM usertb WHERE id = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,id);
