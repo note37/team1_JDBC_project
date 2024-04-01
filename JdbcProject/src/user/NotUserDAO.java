@@ -49,7 +49,7 @@ public class NotUserDAO {
     
     // 비회원 회원정보 전화번호로 가져오기
     public NotUser getInfo(String ph) throws SQLException{
-        conn = DbConn.getConnection("localhost");
+        conn = DbConn.getConnection("192.168.10.17");
         String q = "SELECT * FROM notusertb WHERE phonenumber = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,ph);
