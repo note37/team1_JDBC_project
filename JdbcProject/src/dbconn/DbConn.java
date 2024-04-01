@@ -8,14 +8,13 @@ import java.sql.Statement;
 public class DbConn {
     static String host ="";
 
-    static String ORACLE_URL = null;
+    static String ORACLE_URL = "jdbc:oracle:thin:@192.168.10.17:1521:xe";
     final static String ORACLE_ID = "acos";
     final static String ORACLE_PW = "1234";
     final static String ORACLE_DRV = "oracle.jdbc.driver.OracleDriver";
 
-    public static Connection getConnection(String host) {
+    public static Connection getConnection() {
         Connection conn = null;
-        ORACLE_URL = "jdbc:oracle:thin:@"+host+":1521:xe";
         try {
             Class.forName(ORACLE_DRV); // 드라이버 로드
             // 연결 얻기

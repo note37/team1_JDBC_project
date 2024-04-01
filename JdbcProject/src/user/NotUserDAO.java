@@ -21,7 +21,7 @@ public class NotUserDAO {
     //휴대전화 번호에 이름 같은 경우, 처음 가입하는 회원 회원가입 됐을 때 return 1,
     // 번호에 이름이 다르면 return 0
     public int signIn(String ph , String name) throws SQLException {
-        conn = DbConn.getConnection("localhost");
+        conn = DbConn.getConnection();
         String q = "SELECT * FROM notusertb WHERE phonenumber = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,ph);
@@ -49,7 +49,7 @@ public class NotUserDAO {
     
     // 비회원 회원정보 전화번호로 가져오기
     public NotUser getInfo(String ph) throws SQLException{
-        conn = DbConn.getConnection("192.168.10.17");
+        conn = DbConn.getConnection();
         String q = "SELECT * FROM notusertb WHERE phonenumber = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,ph);
