@@ -6,13 +6,16 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class DbConn {
-    final static String ORACLE_URL = "jdbc:oracle:thin:@localhost:1521:xe";
+    static String host ="";
+
+    static String ORACLE_URL = null;
     final static String ORACLE_ID = "acos";
     final static String ORACLE_PW = "1234";
     final static String ORACLE_DRV = "oracle.jdbc.driver.OracleDriver";
 
-    public static Connection getConnection() {
+    public static Connection getConnection(String host) {
         Connection conn = null;
+        ORACLE_URL = "jdbc:oracle:thin:@"+host+":1521:xe";
         try {
             Class.forName(ORACLE_DRV); // 드라이버 로드
             // 연결 얻기

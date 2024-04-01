@@ -14,7 +14,7 @@ public class UserDAO {
     // logIn -> ID, Password 입력
     // return 0 : ID 없음 / 1 : 성공 / 2 : 비밀 번호 틀림
     public int signIn(String id,String pw) throws SQLException {
-        conn = DbConn.getConnection();
+        conn = DbConn.getConnection("localhost");
         stmt = conn.createStatement();
         String q = "SELECT * FROM usertb WHERE id = '"+id+"'";
         rs = stmt.executeQuery(q);
@@ -38,7 +38,7 @@ public class UserDAO {
     //회원가입 , ID 중복 확인 먼저 한 뒤 Password, 이름, 본인확인 질문, 답변 입력
     // return 0 -> ID 중복, return 1 -> 아이디 생성
     public int signUp(String id) throws SQLException{
-        conn = DbConn.getConnection();
+        conn = DbConn.getConnection("localhost");
         stmt = conn.createStatement();
         String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
         int rrs = 0;
@@ -142,7 +142,7 @@ public class UserDAO {
     //새 비밀번호 입력 후 변경
     // return 0 -> 아이디 없음, return 1 -> 수정완료
     public int findPassword(String id) throws SQLException{
-        conn = DbConn.getConnection();
+        conn = DbConn.getConnection("localhost");
         String q = "SELECT * FROM usertb WHERE id = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,id);
@@ -208,7 +208,7 @@ public class UserDAO {
     // return 1 -> 삭제완료
     public int withDraw(String id, String password) throws SQLException{
         int rrs = 3;
-        conn = DbConn.getConnection();
+        conn = DbConn.getConnection("localhost");
         String q = "SELECT * FROM usertb WHERE id = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,id);
@@ -242,7 +242,7 @@ public class UserDAO {
     //id, password 값으로 유저의 정보
     public User userInfo(String id, String password) throws SQLException{
         User user = new User();
-        conn = DbConn.getConnection();
+        conn = DbConn.getConnection("localhost");
         String q = "SELECT * FROM usertb WHERE id = ? AND password = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,id);
@@ -265,7 +265,7 @@ public class UserDAO {
     // 내 정보 수정
     // User 값을 받아 정보 수정 1 이면 수정 성공
     public int updateUser(User user)throws SQLException{
-        conn = DbConn.getConnection();
+        conn = DbConn.getConnection("localhost");
         String q = "UPDATE usertb SET password = ?, name = ?, question = ?, answer = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,user.getPassword());
