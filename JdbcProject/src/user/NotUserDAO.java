@@ -1,5 +1,7 @@
 package user;
 
+import dbconn.DbConn;
+
 import java.sql.*;
 
 public class NotUserDAO {
@@ -12,9 +14,6 @@ public class NotUserDAO {
     Connection conn = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    String oracleURL = "jdbc:oracle:thin:@localhost:1521:xe";
-    String oracleID = "acos";
-    String oraclePW = "1234";
 
     //비회원 로그인
     //최초 1회 바로 회원가입
@@ -22,7 +21,7 @@ public class NotUserDAO {
     //휴대전화 번호에 이름 같은 경우, 처음 가입하는 회원 회원가입 됐을 때 return 1,
     // 번호에 이름이 다르면 return 0
     public int signIn(String ph , String name) throws SQLException {
-        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
+        conn = DbConn.getConnection();
         String q = "SELECT * FROM notusertb WHERE phonenumber = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,ph);
@@ -41,6 +40,9 @@ public class NotUserDAO {
             pstmt.setString(2,name);
             rrs = pstmt.executeUpdate();
         }
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(conn);
         return rrs;
     }
 }

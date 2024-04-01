@@ -1,5 +1,7 @@
 package user;
 
+import dbconn.DbConn;
+
 import java.sql.*;
 import java.util.Scanner;
 
@@ -8,14 +10,11 @@ public class UserDAO {
     Statement stmt = null;
     PreparedStatement pstmt = null;
     ResultSet rs = null;
-    String oracleURL = "jdbc:oracle:thin:@localhost:1521:xe";
-    String oracleID = "acos";
-    String oraclePW = "1234";
 
     // logIn -> ID, Password 입력
     // return 0 : ID 없음 / 1 : 성공 / 2 : 비밀 번호 틀림
     public int signIn(String id,String pw) throws SQLException {
-        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
+        conn = DbConn.getConnection();
         stmt = conn.createStatement();
         String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
         rs = stmt.executeQuery(q);
@@ -31,9 +30,9 @@ public class UserDAO {
             // select 문으로 id를 찾지 못했을 때 -> id가 없는것 or 잘 못 입력한 것
             rrs = 0;
         }
-        rs.close();
-        stmt.close();
-        conn.close();
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(conn);
         return rrs;
     }
 
@@ -41,7 +40,7 @@ public class UserDAO {
     //회원가입 , ID 중복 확인 먼저 한 뒤 Password, 이름, 본인확인 질문, 답변 입력
     // return 0 -> ID 중복, return 1 -> 아이디 생성
     public int signUp(String id) throws SQLException{
-        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
+        conn = DbConn.getConnection();
         stmt = conn.createStatement();
         String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
         int rrs = 0;
@@ -133,10 +132,10 @@ public class UserDAO {
                 e.printStackTrace();
             }
         }
-        rs.close();
-        stmt.close();
-        pstmt.close();
-        conn.close();
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(stmt);
+        DbConn.close(conn);
         return rrs;
     }
 
@@ -145,7 +144,7 @@ public class UserDAO {
     //새 비밀번호 입력 후 변경
     // return 0 -> 아이디 없음, return 1 -> 수정완료
     public int findPassword(String id) throws SQLException{
-        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
+        conn = DbConn.getConnection();
         String q = "SELECT * FROM usertb WHERE id = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,id);
@@ -198,9 +197,9 @@ public class UserDAO {
         }else{
             rrs = 0;
         }
-        rs.close();
-        pstmt.close();
-        conn.close();
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(conn);
         return rrs;
     }
 
@@ -211,7 +210,7 @@ public class UserDAO {
     // return 1 -> 삭제완료
     public int withDraw(String id, String password) throws SQLException{
         int rrs = 0;
-        conn = DriverManager.getConnection(oracleURL,oracleID,oraclePW);
+        conn = DbConn.getConnection();
         String q = "SELECT * FROM usertb WHERE id = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,id);
@@ -234,6 +233,9 @@ public class UserDAO {
                 }
             }
         }
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(conn);
         return rrs;
     }
 

@@ -1,54 +1,58 @@
 package dbconn;
 
-
-import user.NotUser;
-import user.User;
-
-import java.sql.*;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class DbConn {
-    Connection conn = null;
-    Statement stmt = null;
-    ResultSet rs = null;
+    final static String ORACLE_URL = "jdbc:oracle:thin:@localhost:1521:xe";
+    final static String ORACLE_ID = "acos";
+    final static String ORACLE_PW = "1234";
+    final static String ORACLE_DRV = "oracle.jdbc.driver.OracleDriver";
 
-    public void select(String table) throws SQLException {
-        //Class.forName("oracle.jdbc.driver.OracleDriver");
-        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","acos","1234");
-        // 학원에서는 @~: 사이의 값을 192.168.10.17 로 변경
-        // 집에서는 loaclhost 로 변경해서 table 직접 만들어서 써야함.
-        stmt = conn.createStatement();
-        String query = "SELECT * FROM " + table;
-
-        rs = stmt.executeQuery(query);
-
-        // table 종류 : usertb, notusertb, qauser, qanotuser, enrolment, consulting, classtb
-        switch (table) {
-            case "usertb":
-                while (rs.next()) {
-                    User user = new User();
-                    user.setId(rs.getString("id"));
-                    user.setPassword(rs.getString("password"));
-                    user.setName(rs.getString("name"));
-                    user.setQuestion(rs.getString("question"));
-                    user.setAnswer(rs.getString("answer"));
-
-                    System.out.println("[id : " + user.getId()
-                            + "] [name : " + user.getName() + "]");
-                }
-                break;
-            case "notusertb":
-                while( rs.next()){
-                    NotUser nuser = new NotUser();
-                    nuser.setPhoneNumber(rs.getString("phonenumber"));
-                    nuser.setName(rs.getString("name"));
-
-                    System.out.println("[PhoneNumber :"+ nuser.getPhoneNumber()
-                            +"] [name : "+nuser.getName() + "]");
-                }
+    public static Connection getConnection() {
+        Connection conn = null;
+        try {
+            Class.forName(ORACLE_DRV); // 드라이버 로드
+            // 연결 얻기
+            conn = DriverManager.getConnection(ORACLE_URL, ORACLE_ID, DbConn.ORACLE_PW);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        rs.close();
-        stmt.close();
-        conn.close();
+        return conn;
     }
+
+    public static void close(Connection conn) {
+        try {
+            if(conn != null && !conn.isClosed()) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void close(Statement stmt) {
+        try {
+            if(stmt != null && !stmt.isClosed()) {
+                stmt.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void close(ResultSet rset) {
+        try {
+            if(rset != null && !rset.isClosed()) {
+                rset.close();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }
