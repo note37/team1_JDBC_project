@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class UserDAO {
     public static void main(String[] args) throws SQLException {
         UserDAO uDao = new UserDAO();
-        int i = uDao.signUp("test2");
+        int i = uDao.findPassword("test2");
         System.out.println(i);
     }
     Connection conn = null;
@@ -142,5 +142,67 @@ public class UserDAO {
         return rrs;
     }
 
-
+    
+    //비밀번호 찾기, ID값 받고 본인확인 질문 보여준 뒤 답변 받고 맞으면
+    //새 비밀번호 입력 후 변경
+    // return 0 -> 아이디 없음, return 1 -> 수정완료
+    public int findPassword(String id) throws SQLException{
+        conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "acos", "1234");
+        String q = "SELECT * FROM usertb WHERE id = ?";
+        pstmt = conn.prepareStatement(q);
+        pstmt.setString(1,id);
+        rs = pstmt.executeQuery();
+        String password;
+        int rrs = 0;
+        if(rs.next()){
+            String question = rs.getString("question");
+            System.out.println("본인확인 질문 : "+question);
+            Scanner sc = new Scanner(System.in);
+            System.out.print("답 : ");
+            String answer = sc.nextLine();
+            if(rs.getString("answer").equals(answer)){
+                while(true) {
+                    System.out.print("비밀번호 재설정 : ");
+                    password = sc.nextLine();
+                    char[] pwArr = password.toCharArray();
+                    int pwVal = 0;
+                    for(char c : pwArr){
+                        if(c < 48) {
+                            pwVal = 0;
+                            break;
+                        }
+                        else if(c>=58 && c<65) {
+                            pwVal = 0;
+                            break;
+                        }
+                        else if(c>=91 && c<97) {
+                            pwVal = 0;
+                            break;
+                        }
+                        else if(c>122){
+                            pwVal = 0;
+                            break;
+                        }
+                        pwVal = 1;
+                    }
+                    if(pwVal == 0) {
+                        System.out.println("비밀 번호는 영어와 숫자로만 입력 바랍니다.");
+                        continue;
+                    }
+                    break;
+                }
+                q = "UPDATE usertb SET password = ? WHERE id = ?";
+                pstmt = conn.prepareStatement(q);
+                pstmt.setString(1, password);
+                pstmt.setString(2,id);
+                rrs = pstmt.executeUpdate();
+            }
+        }else{
+            rrs = 0;
+        }
+        rs.close();
+        pstmt.close();
+        conn.close();
+        return rrs;
+    }
 }
