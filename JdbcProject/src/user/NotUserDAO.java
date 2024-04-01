@@ -45,4 +45,24 @@ public class NotUserDAO {
         DbConn.close(conn);
         return rrs;
     }
+
+    
+    // 비회원 회원정보 전화번호로 가져오기
+    public NotUser getInfo(String ph) throws SQLException{
+        conn = DbConn.getConnection();
+        String q = "SELECT * FROM notusertb WHERE phonenumber = ?";
+        pstmt = conn.prepareStatement(q);
+        pstmt.setString(1,ph);
+        rs = pstmt.executeQuery();
+
+        NotUser nUser = new NotUser();
+        nUser.setPhoneNumber(ph);
+        nUser.setName(rs.getString("name"));
+
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(conn);
+
+        return nUser;
+    }
 }

@@ -16,19 +16,17 @@ public class UserDAO {
     public int signIn(String id,String pw) throws SQLException {
         conn = DbConn.getConnection();
         stmt = conn.createStatement();
-        String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
+        String q = "SELECT * FROM usertb WHERE id = '"+id+"'";
         rs = stmt.executeQuery(q);
-        int rrs;
+        int rrs = 0;
         if(rs.next()){
             // id 있는 경우
             if(rs.getString("password").equals(pw)){
                 rrs = 1; // 로그인 성공
+                System.out.println("안녕하세요 '"+rs.getString("name")+"'님");
             }else{
                 rrs = 2; //비밀 번호 다름
             }
-        }else{
-            // select 문으로 id를 찾지 못했을 때 -> id가 없는것 or 잘 못 입력한 것
-            rrs = 0;
         }
         DbConn.close(rs);
         DbConn.close(pstmt);
@@ -209,7 +207,7 @@ public class UserDAO {
     // return 0 -> 아이디, 비밀번호, 답변이 틀림
     // return 1 -> 삭제완료
     public int withDraw(String id, String password) throws SQLException{
-        int rrs = 0;
+        int rrs = 3;
         conn = DbConn.getConnection();
         String q = "SELECT * FROM usertb WHERE id = ?";
         pstmt = conn.prepareStatement(q);
@@ -231,12 +229,54 @@ public class UserDAO {
                         rrs = pstmt.executeUpdate();
                     }
                 }
+                else rrs = 0;
             }
         }
         DbConn.close(rs);
         DbConn.close(pstmt);
         DbConn.close(conn);
         return rrs;
+    }
+
+
+    //id, password 값으로 유저의 정보
+    public User userInfo(String id, String password) throws SQLException{
+        User user = new User();
+        conn = DbConn.getConnection();
+        String q = "SELECT * FROM usertb WHERE id = ? AND password = ?";
+        pstmt = conn.prepareStatement(q);
+        pstmt.setString(1,id);
+        pstmt.setString(2,password);
+        rs = pstmt.executeQuery();
+        if(rs.next()) {
+            user.setId(id);
+            user.setPassword(password);
+            user.setName(rs.getString("name"));
+            user.setQuestion(rs.getString("question"));
+            user.setAnswer(rs.getString("answer"));
+            DbConn.close(rs);
+            DbConn.close(pstmt);
+            DbConn.close(conn);
+        }
+        return user;
+    }
+
+
+    // 내 정보 수정
+    // User 값을 받아 정보 수정 1 이면 수정 성공
+    public int updateUser(User user)throws SQLException{
+        conn = DbConn.getConnection();
+        String q = "UPDATE usertb SET password = ?, name = ?, question = ?, answer = ?";
+        pstmt = conn.prepareStatement(q);
+        pstmt.setString(1,user.getPassword());
+        pstmt.setString(2,user.getName());
+        pstmt.setString(3,user.getQuestion());
+        pstmt.setString(4,user.getAnswer());
+        int rst = pstmt.executeUpdate();
+        DbConn.close(rs);
+        DbConn.close(pstmt);
+        DbConn.close(conn);
+        return rst;
     }
 
 }
