@@ -6,11 +6,12 @@ import java.util.Scanner;
 public class UserDAO {
     public static void main(String[] args) throws SQLException {
         UserDAO uDao = new UserDAO();
-        int i = uDao.signUp("test");
+        int i = uDao.signUp("test2");
         System.out.println(i);
     }
     Connection conn = null;
     Statement stmt = null;
+    PreparedStatement pstmt = null;
     ResultSet rs = null;
 
 
@@ -45,14 +46,10 @@ public class UserDAO {
         conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "acos", "1234");
         stmt = conn.createStatement();
         String q = "SELECT id, password FROM usertb WHERE id = '"+id+"'";
-        int rrs;
+        int rrs = 0;
         rs = stmt.executeQuery(q);
-        if(rs.next()){
-            // id 있는 경우
-            rrs = 0;
-        }else{
+        if(!rs.next()){
             // 없는 경우
-            rrs = 1;
             // console 에서 사용할 구현부
             Scanner sc = new Scanner(System.in);
             String pw;
@@ -120,17 +117,30 @@ public class UserDAO {
                     System.out.println("값을 잘못 입력하셨습니다.");
                 }
             }
-            q = "INSERT INTO usertb VALUES ('"+id+"',"
-                    +"'"+pw+"','"+name+"','"+question+"','"+answer+"')";
-            int insertRs = stmt.executeUpdate(q);
-            if(insertRs == 1) rrs = 1;
-            else rrs = 0;
+//            q = "INSERT INTO usertb VALUES ('"+id+"',"
+//                    +"'"+pw+"','"+name+"','"+question+"','"+answer+"')";
+//            int insertRs = stmt.executeUpdate(q);
+//            if(insertRs == 1) rrs = 1;
+//            else rrs = 0;
+            q = "INSERT INTO usertb VALUES(?,?,?,?,?)";
+            try {
+                pstmt = conn.prepareStatement(q);
+                pstmt.setString(1,id);
+                pstmt.setString(2,pw);
+                pstmt.setString(3,name);
+                pstmt.setString(4,question);
+                pstmt.setString(5,answer);
+                rrs = pstmt.executeUpdate();
+            }catch (Exception e ){
+                e.printStackTrace();
+            }
         }
         rs.close();
         stmt.close();
+        pstmt.close();
         conn.close();
         return rrs;
     }
 
-    
+
 }
