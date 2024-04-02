@@ -23,6 +23,7 @@ public class Main {
     public static void main(String[] args) throws SQLException {
         while(true) {
             try {
+                System.out.println();
                 System.out.println("========================================KH 정보 교육원========================================");
                 System.out.print("[1]회원 로그인  [2]비회원 로그인  [3]회원 가입  [4]비밀 번호 찾기 [5]종료 : ");
                 String  signInSel = sc.nextLine();
