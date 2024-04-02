@@ -126,7 +126,10 @@ public class Main {
         System.out.println("===============현재 접속중인 계정 : "+ user.getId()+" ===============");
         if(user.getId().equals("operator")){
             // 운영자 계정일 때
-            
+            System.out.println("[1]상담 확인 [2]Q&A 확인 [3]종료");
+            int selNum = sc.nextInt();
+            sc.nextLine();
+
         }else{
             // 일반 사용자 일 때
             while(true){
