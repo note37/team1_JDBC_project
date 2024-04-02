@@ -1,3 +1,4 @@
+import cls.ApplyVo;
 import cls.ClassDao;
 import cls.ClassVo;
 import dbconn.DbConn;
@@ -234,37 +235,30 @@ public class Main {
                                     continue;
                                 case 2:
                                     System.out.println("\n현재 " + user.getName() + "님이 신청한 수업 목록입니다.");
-                                    List<ClassVo> appliedClasses = dao.getAppliedClasses(user.getId());
+                                    List<ApplyVo> appliedClasses = dao.getAppliedClasses(user.getId());
                                     dao.printAppliedClasses(appliedClasses);
-
-                                    System.out.print("신청하신 수업을 취소하시겠습니까? [1]예 [2]아니오 : ");
+                                    System.out.print("취소하실 강의에 번호를 입력하세요 : ");
                                     int askAgain = sc.nextInt();
-                                    switch (askAgain) {
-                                        case 1:
-                                            dao.cancelAllAppliedClasses(user.getId());
-                                            System.out.println("취소가 완료되었습니다.");
-                                            break;
-                                        case 2:
-                                            System.out.println("수강취소 작업이 취소되었습니다.");
-                                            break;
-                                        default:
-                                            System.out.println("잘못된 입력입니다.");
-                                    }
+
+                                    dao.cancelAllAppliedClasses(appliedClasses.get(askAgain-1));
+                                    System.out.println("취소가 완료되었습니다.");
+
                                     continue;
 
                                 case 3:
                                     System.out.println("\n현재 " + user.getName() + "님이 신청한 수업 목록입니다.");
-                                    List<ClassVo> appliedClasses1 = dao.getAppliedClasses(user.getId());
+                                    List<ApplyVo> appliedClasses1 = dao.getAppliedClasses(user.getId());
                                     dao.printAppliedClasses(appliedClasses1);
                                     continue;
+                                case 4:
+                                    break;
 
                                 default:
                                     System.out.println("메뉴를 다시 선택하세요");
-                                    break;
                             }
-
-
+                            break;
                         }
+                        continue;
                     case 5:
                     case 6:
                         return;

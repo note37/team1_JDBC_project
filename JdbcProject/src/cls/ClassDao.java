@@ -133,8 +133,8 @@ public class ClassDao {
         }
     }
 
-    public List<ClassVo> getAppliedClasses(String userId) {
-        List<ClassVo> appliedClasses = new ArrayList<>();
+    public List<ApplyVo> getAppliedClasses(String userId) {
+        List<ApplyVo> appliedClasses = new ArrayList<>();
         try {
             conn = DbConn.getConnection();
             String sql = "SELECT * FROM APPLYUSER WHERE ID = ?";
@@ -143,9 +143,11 @@ public class ClassDao {
             rs = pStmt.executeQuery();
 
             while (rs.next()) {
+                String id = rs.getString("ID");
+                String name = rs.getString("NAME");
                 String title = rs.getString("TITLE");
                 String room = rs.getString("ROOM");
-                appliedClasses.add(new ClassVo(0, title, "", room, 0, 0));
+                appliedClasses.add(new ApplyVo(id,name, title,room));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,30 +159,34 @@ public class ClassDao {
         return appliedClasses;
     }
 
-    public void printAppliedClasses(List<ClassVo> appliedClasses) {
+    public void printAppliedClasses(List<ApplyVo> appliedClasses) {
+        int i =1;
         if (appliedClasses.isEmpty()) {
             System.out.println("신청한 수업이 없습니다.");
         } else {
-            for (ClassVo e : appliedClasses) {
-                System.out.println("- " + e.getTitle() + " (" + e.getRoom() + ")");
+            for (ApplyVo e : appliedClasses) {
+                System.out.println((i++) + "- " + e.getTITLE() + " (" + e.getROOM() + ")");
             }
         }
     }
 
-    public void cancelAllAppliedClasses(String userId) {
+    public void cancelAllAppliedClasses(ApplyVo avo) {
         try {
             conn = DbConn.getConnection();
 
             // APPLYUSER 테이블에서 해당 사용자의 모든 항목 삭제
-            String deleteSql = "DELETE FROM APPLYUSER WHERE ID = ?";
+            String deleteSql = "DELETE FROM APPLYUSER WHERE ID = ? AND TITLE = ?";
             pStmt = conn.prepareStatement(deleteSql);
-            pStmt.setString(1, userId);
+            pStmt.setString(1, avo.getID());
+            pStmt.setString(2, avo.getTITLE());
+
             pStmt.executeUpdate();
 
             // CLASSTB 테이블의 해당 수업의 APPLICANT 수 감소
-            String updateSql = "UPDATE ClassTb SET APPLICANT = APPLICANT - 1 WHERE OPENNUM IN (SELECT OPENNUM FROM APPLYUSER WHERE ID = ?)";
+            String updateSql = "UPDATE ClassTb SET APPLICANT = (SELECT APPLICANT FROM CLASSTB WHERE TITLE = ?)  - 1 WHERE TITLE = ?";
             pStmt = conn.prepareStatement(updateSql);
-            pStmt.setString(1, userId);
+            pStmt.setString(1, avo.getTITLE());
+            pStmt.setString(2, avo.getTITLE());
             pStmt.executeUpdate();
 
         } catch (SQLException e) {
