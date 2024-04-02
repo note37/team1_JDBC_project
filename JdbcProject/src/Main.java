@@ -2,12 +2,15 @@ import cls.ApplyVo;
 import cls.ClassDao;
 import cls.ClassVo;
 import dbconn.DbConn;
+import enrolment.EnrolmentDao;
+import enrolment.EnrolmentVo;
 import user.NotUser;
 import user.NotUserDAO;
 import user.User;
 import user.UserDAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,6 +23,7 @@ public class Main {
     static ClassDao dao = new ClassDao();
     static UserDAO uDao = new UserDAO();
     static NotUserDAO nuDao = new NotUserDAO();
+    static EnrolmentDao enrDao = new EnrolmentDao();
     static String name;
     public static void main(String[] args) throws SQLException {
         while(true) {
@@ -134,11 +138,27 @@ public class Main {
     public static void step1() throws SQLException {
         System.out.println();
         System.out.println("○●○●○●○●○●○●    '"+ name +"'님 어서오세요    ○●○●○●○●○●○●");
-        if(isUser==1 && user.getId().equals("operator")){
+        if(isUser==1 && user.getId().equals("master")){
             // 운영자 계정일 때
-            System.out.print("[1]상담 확인 [2]Q&A 확인 [3]로그아웃 : ");
-            int selNum = sc.nextInt();
-            sc.nextLine();
+            while(true) {
+                System.out.print("[1]상담 확인 [2]Q&A 확인 [3]로그아웃 : ");
+                int selNum = sc.nextInt();
+                sc.nextLine();
+                switch (selNum) {
+                    case 1:
+                        int i = 1;
+                        List<EnrolmentVo> enrList = enrDao.allEnrList();
+                        for (EnrolmentVo ev : enrList) System.out.println((i++)+ ". 이름 : "+ev.getName()+"  시간 : "+ev.getDate());
+                        System.out.println();
+                        continue;
+                    case 2:
+                        continue;
+                    case 3:
+                        break;
+
+                }
+                break;
+            }
         } else if(isUser == 1){
             while(true){
                 System.out.print("[1]회원 탈퇴  [2]내 정보 수정  [3]상담  [4]수강  [5]Q&A  [6]로그아웃 : ");
