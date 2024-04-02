@@ -4,6 +4,8 @@ import cls.ClassVo;
 import dbconn.DbConn;
 import enrolment.EnrolmentDao;
 import enrolment.EnrolmentVo;
+import qa.QADao;
+import qa.QAVo;
 import user.NotUser;
 import user.NotUserDAO;
 import user.User;
@@ -24,6 +26,7 @@ public class Main {
     static UserDAO uDao = new UserDAO();
     static NotUserDAO nuDao = new NotUserDAO();
     static EnrolmentDao enrDao = new EnrolmentDao();
+    static QADao qaDao = new QADao();
     static String name;
     public static void main(String[] args) throws SQLException {
         while(true) {
@@ -144,14 +147,18 @@ public class Main {
                 System.out.print("[1]상담 확인 [2]Q&A 확인 [3]로그아웃 : ");
                 int selNum = sc.nextInt();
                 sc.nextLine();
+                int i = 1;
                 switch (selNum) {
                     case 1:
-                        int i = 1;
                         List<EnrolmentVo> enrList = enrDao.allEnrList();
                         for (EnrolmentVo ev : enrList) System.out.println((i++)+ ". 이름 : "+ev.getName()+"  시간 : "+ev.getDate());
                         System.out.println();
                         continue;
                     case 2:
+                        System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
+                        List<QAVo> qaList = qaDao.questionSelect();
+                        for(QAVo qa : qaList) System.out.println((i++) + ". ID : "+qa.getId() + "  질문 내용 : "+qa.getQuestion());
+                        System.out.println();
                         continue;
                     case 3:
                         break;
