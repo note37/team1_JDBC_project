@@ -1,6 +1,7 @@
 package cls;
 
 import dbconn.DbConn;
+import org.w3c.dom.ls.LSOutput;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -68,10 +69,28 @@ public class ClassDao {
 
             // 해당 수업 정보가 있는지 확인
             if (rs.next()) {
+//                if (isAlreadyApplied(userId)) {
+//                    System.out.println("이미 해당 수업을 신청하셨습니다.");
+//                    return; // 중복 신청이므로 메서드 실행 중단
+//                }
                 int currentApplicant = rs.getInt("APPLICANT");
                 int max = rs.getInt("MAX");
                 String title = rs.getString("TITLE");
                 String room = rs.getString("ROOM");
+
+                selectSql = "SELECT * FROM APPLYUSER WHERE ID = ? AND TITLE = ?";
+                pStmt = conn.prepareStatement(selectSql);
+                pStmt.setString(1, userId);
+                pStmt.setString(2, title);
+                rs = pStmt.executeQuery();
+                if(rs.next()) {
+                    System.out.println("이미 신청된 내역이 있습니다.");
+                    DbConn.close(rs);
+                    DbConn.close(pStmt);
+                    DbConn.close(conn);
+                    return;
+                }
+
 
                 // 현재 신청 인원이 최대 인원을 초과하지 않으면
                 if (currentApplicant < max) {
@@ -109,6 +128,64 @@ public class ClassDao {
         } finally {
             // 자원 해제
             DbConn.close(rs);
+            DbConn.close(pStmt);
+            DbConn.close(conn);
+        }
+    }
+
+    public List<ClassVo> getAppliedClasses(String userId) {
+        List<ClassVo> appliedClasses = new ArrayList<>();
+        try {
+            conn = DbConn.getConnection();
+            String sql = "SELECT * FROM APPLYUSER WHERE ID = ?";
+            pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, userId);
+            rs = pStmt.executeQuery();
+
+            while (rs.next()) {
+                String title = rs.getString("TITLE");
+                String room = rs.getString("ROOM");
+                appliedClasses.add(new ClassVo(0, title, "", room, 0, 0));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbConn.close(rs);
+            DbConn.close(pStmt);
+            DbConn.close(conn);
+        }
+        return appliedClasses;
+    }
+
+    public void printAppliedClasses(List<ClassVo> appliedClasses) {
+        if (appliedClasses.isEmpty()) {
+            System.out.println("신청한 수업이 없습니다.");
+        } else {
+            for (ClassVo e : appliedClasses) {
+                System.out.println("- " + e.getTitle() + " (" + e.getRoom() + ")");
+            }
+        }
+    }
+
+    public void cancelAllAppliedClasses(String userId) {
+        try {
+            conn = DbConn.getConnection();
+
+            // APPLYUSER 테이블에서 해당 사용자의 모든 항목 삭제
+            String deleteSql = "DELETE FROM APPLYUSER WHERE ID = ?";
+            pStmt = conn.prepareStatement(deleteSql);
+            pStmt.setString(1, userId);
+            pStmt.executeUpdate();
+
+            // CLASSTB 테이블의 해당 수업의 APPLICANT 수 감소
+            String updateSql = "UPDATE ClassTb SET APPLICANT = APPLICANT - 1 WHERE OPENNUM IN (SELECT OPENNUM FROM APPLYUSER WHERE ID = ?)";
+            pStmt = conn.prepareStatement(updateSql);
+            pStmt.setString(1, userId);
+            pStmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             DbConn.close(pStmt);
             DbConn.close(conn);
         }
