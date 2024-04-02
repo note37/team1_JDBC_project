@@ -244,6 +244,29 @@ public class Main {
                         System.out.println("○●○●○●○●○●○●변경되었습니다.○●○●○●○●○●○●");
                         continue;
                     case 3:
+                        while (true){
+                        System.out.println("=============== 방문 상담 예약 ===============");
+                        System.out.print("[1] : 상담 예약\n[2] : 상담 취소\n [3] : 상담 조회\n [4] : 나가기");
+                        int num = sc.nextInt();
+                        switch (num){
+                            case 1:
+                                System.out.println("===== 상담 예약 =====");
+                                System.out.println("신청자 이름 : ");
+                                String name = sc.next();
+                                System.out.println("원하시는 방문 상담 날짜를 입력해 주세요 : ");
+                                String enrDate = sc.next();
+                                System.out.println("신청자 전화번호 : ");
+                                String phoneNumber = sc.next();
+                                System.out.println("문의 내용 : ");
+                                String txt = sc.next();
+
+                            case 2:
+                                System.out.println("===== 상담 예약 취소 =====");
+                                System.out.println("예약하신 이름 : ");
+                            case 3:
+                            case 4:
+                        }
+                    }
                     case 4:
                         while (true) {
                             System.out.println("\n☆★☆★☆★☆★KH정보교육원 수강 신청 메뉴☆★☆★☆★☆★\n");
