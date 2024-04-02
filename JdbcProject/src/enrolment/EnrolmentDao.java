@@ -29,7 +29,7 @@ public class EnrolmentDao {
     public List<EnrolmentVo> allEnrList() throws SQLException {
         List<EnrolmentVo> list = new ArrayList<>();
         conn = DbConn.getConnection();
-        String q = "SELECT * FROM ENROLMENT";
+        String q = "SELECT * FROM ENROLMENT ORDER BY enrdate";
         pStmt = conn.prepareStatement(q);
         rs = pStmt.executeQuery();
 
