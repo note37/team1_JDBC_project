@@ -3,6 +3,9 @@ package qa;
 import dbconn.DbConn;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class QADao {
     Connection conn = null;
@@ -10,31 +13,46 @@ public class QADao {
     PreparedStatement pstmt = null;
     ResultSet rs = null;
 
-public int userQuestion(String id, String question) throws SQLException {
-    conn = DbConn.getConnection();
-    stmt = conn.createStatement();
-    String q = "SELECT * FROM UserQA WHERE id = '"+id+"'";
-    rs = stmt.executeQuery(q);
-    int rrs = 0;
-    if(rs.next()) {
-        // 질문 있는 경우
-        if(rs.getString("psw629").equals(id)){
-            rrs = 1;
-            System.out.println("질문내용은 '" +rs.getString("question")+"'입니다");
-        } else {
-            rrs = 2;
-            System.out.println("질문내역이 없습니다.");
+public List<QAVo> questionSelect() throws SQLException{
+    List<QAVo> list = new ArrayList<>();
+    try {
+        conn = DbConn.getConnection();
+        stmt = conn.createStatement();
+        String sql = "SELECT * FROM QAUSER";
+        rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            String id = rs.getString("id");
+            String question = rs.getString("question");
+            String answer = rs.getString("answer");
+            list.add(new QAVo(id, question, answer));
         }
+        DbConn.close(rs);
+        DbConn.close(stmt);
+        DbConn.close(conn);
+    } catch(Exception e) {
+        e.printStackTrace();
     }
-    DbConn.close(rs);
-    DbConn.close(pstmt);
-    DbConn.close(conn);
-    return rrs;
+    return list;
+    }
+    public int insertQA(String id, String question) throws SQLException {
+        conn = DbConn.getConnection();
+        String insertSql = "INSERT INTO QAUSER (id, question) VALUES (?, ?)";
+        pstmt = conn.prepareStatement(insertSql);
+        pstmt.setString(1, id);
+        pstmt.setString(2, question);
+        // pstmt.setString(3, answer);
+
+        int rst = pstmt.executeUpdate();
+        DbConn.close(pstmt);
+        DbConn.close(conn);
+        return rst;
+
+    }
+
 }
 
 
 
 
-
-
-}
+// insert, delete
