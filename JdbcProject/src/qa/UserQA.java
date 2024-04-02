@@ -33,8 +33,6 @@ public class UserQA {
                 sc.nextLine();
                 String question = sc.nextLine();
 
-                // insert conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.10.17:xe","acos","1234");
-
                 System.out.println("질문이 저장되었습니다");
                 try {
                     BufferedWriter bw = new BufferedWriter(new FileWriter("question.txt"));
