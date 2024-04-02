@@ -30,8 +30,6 @@ public class NotUserDAO {
         if(rs.next()){
             if(name.equals(rs.getString("name"))){
                 rrs = 1;
-            }else{
-                rrs = 0;
             }
         }else{
             q = "INSERT INTO notusertb (phonenumber,name) VALUES (?,?)";
@@ -57,7 +55,7 @@ public class NotUserDAO {
 
         NotUser nUser = new NotUser();
         nUser.setPhoneNumber(ph);
-        nUser.setName(rs.getString("name"));
+        if(rs.next()) nUser.setName(rs.getString("name"));
 
         DbConn.close(rs);
         DbConn.close(pstmt);

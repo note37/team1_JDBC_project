@@ -23,7 +23,6 @@ public class UserDAO {
             // id 있는 경우
             if(rs.getString("password").equals(pw)){
                 rrs = 1; // 로그인 성공
-                System.out.println("안녕하세요 '"+rs.getString("name")+"'님");
             }else{
                 rrs = 2; //비밀 번호 다름
             }
@@ -266,12 +265,13 @@ public class UserDAO {
     // User 값을 받아 정보 수정 1 이면 수정 성공
     public int updateUser(User user)throws SQLException{
         conn = DbConn.getConnection();
-        String q = "UPDATE usertb SET password = ?, name = ?, question = ?, answer = ?";
+        String q = "UPDATE usertb SET password = ?, name = ?, question = ?, answer = ? WHERE id = ?";
         pstmt = conn.prepareStatement(q);
         pstmt.setString(1,user.getPassword());
         pstmt.setString(2,user.getName());
         pstmt.setString(3,user.getQuestion());
         pstmt.setString(4,user.getAnswer());
+        pstmt.setString(5,user.getId());
         int rst = pstmt.executeUpdate();
         DbConn.close(rs);
         DbConn.close(pstmt);

@@ -11,21 +11,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    static int startNum = 0;
+    static Scanner sc = new Scanner(System.in);
+    static User user = null;
+    static NotUser nUser = null;
+    static int isUser;
+    static ClassDao dao = new ClassDao();
+    static UserDAO uDao = new UserDAO();
+    static NotUserDAO nuDao = new NotUserDAO();
+    static String name;
     public static void main(String[] args) throws SQLException {
-        Scanner sc = new Scanner(System.in);
-        User user = null;
-        ClassDao dao = new ClassDao();
-        NotUser nUser;
-        System.out.println();
-        System.out.println("========================================KH 정보 교육원========================================");
         while(true) {
             try {
-                System.out.print("[1]회원 로그인  [2]비회원 로그인  [3]회원 가입  [4]비밀 번호 찾기 : ");
-                int signInSel = sc.nextInt();
-                sc.nextLine();
+                System.out.println("========================================KH 정보 교육원========================================");
+                System.out.print("[1]회원 로그인  [2]비회원 로그인  [3]회원 가입  [4]비밀 번호 찾기 [5]종료 : ");
+                String  signInSel = sc.nextLine();
                 UserDAO uDao;
                 switch (signInSel){
-                    case 1 :
+                    case "1" :
                         uDao = new UserDAO();
                             System.out.print("아이디 입력 : ");
                             String inputID = sc.nextLine();
@@ -43,6 +46,8 @@ public class Main {
                                 case 1:
                                     System.out.println("로그인 성공");
                                     user = uDao.userInfo(inputID, password);
+                                    isUser = 1;
+                                    name = user.getName();
                                     break;
                                 case 2:
                                     System.out.println("비밀 번호가 틀렸습니다.");
@@ -51,9 +56,9 @@ public class Main {
                                     System.out.println("!예기치 않은 오류!");
                                     continue;
                             }
-                        break;
-                    case 2 :
-                        NotUserDAO nuDao = new NotUserDAO();
+                            step1();
+                        continue;
+                    case "2" :
                         while(true) {
                             System.out.print("휴대전화 번호 입력 : ");
                             String inputPh = sc.nextLine();
@@ -67,6 +72,8 @@ public class Main {
                                 case 1:
                                     System.out.println("비회원 로그인 성공");
                                     nUser = nuDao.getInfo(inputPh);
+                                    isUser = 0;
+                                    name = nUser.getName();
                                     break;
                                 default:
                                     System.out.println("예기치 않은 오류!");
@@ -74,8 +81,9 @@ public class Main {
                             }
                             break;
                         }
-                        break;
-                    case 3:
+                        step1();
+                        continue;
+                    case "3":
                         uDao = new UserDAO();
                         while(true) {
                             System.out.print("아이디 입력 : ");
@@ -96,7 +104,7 @@ public class Main {
                             break;
                         }
                         continue;
-                    case 4:
+                    case "4":
                         uDao = new UserDAO();
                         while(true){
                             System.out.print("비밀번호를 찾을 아이디 입력 : ");
@@ -109,36 +117,33 @@ public class Main {
                             }
                         }
                         continue;
+                    case "5":
+                        return;
                     default:
-                        System.out.println("1, 2, 3, 4 번 중에 선택해 주세요.");
-                        continue;
+                        System.out.println("1, 2, 3, 4, 5 번 중에 선택해 주세요.");
                 }
             }
             catch (Exception e){
-                e.printStackTrace();
                 System.out.println("잘못 입력하셨습니다. 다시 입력해 주세요.");
             }
-            break;
         }
-        // 로그인 페이지 끝, 다음 선택 페이지
-        // 회원 탈퇴, 정보 수정, 상담 예약, 수강 신청, Q&A 선택
+    }
+
+    public static void step1() throws SQLException {
         System.out.println();
-        System.out.println("===============현재 접속중인 계정 : "+ user.getId()+" ===============");
-        if(user.getId().equals("operator")){
+        System.out.println("○●○●○●○●○●○●    '"+ name +"'님 어서오세요    ○●○●○●○●○●○●");
+        if(isUser==1 && user.getId().equals("operator")){
             // 운영자 계정일 때
-            System.out.println("[1]상담 확인 [2]Q&A 확인 [3]종료");
+            System.out.print("[1]상담 확인 [2]Q&A 확인 [3]로그아웃 : ");
             int selNum = sc.nextInt();
             sc.nextLine();
-
-        }else{
-            // 일반 사용자 일 때
+        } else if(isUser == 1){
             while(true){
-                System.out.println("[1]회원 탈퇴  [2]내 정보 수정  [3]상담  [4]수강  [5]Q&A  [6]종료");
+                System.out.print("[1]회원 탈퇴  [2]내 정보 수정  [3]상담  [4]수강  [5]Q&A  [6]로그아웃 : ");
                 int selNum = sc.nextInt();
                 sc.nextLine();
                 switch (selNum) {
                     case 1:
-                        UserDAO uDao = new UserDAO();
                         int wdRst = uDao.withDraw(user.getId(), user.getPassword());
                         if (wdRst == 1) {
                             System.out.println("삭제 되었습니다.");
@@ -152,7 +157,7 @@ public class Main {
                         }
                     case 2:
                         while (true){
-                            System.out.print("무엇을 변경하겠습니까? [1]이름  [2]비밀번호  [3]본인확인 답변");
+                            System.out.print("무엇을 변경하겠습니까? [1]이름  [2]비밀번호  [3]본인확인 답변 : ");
                             int updateUserSel = sc.nextInt();
                             sc.nextLine();
                             switch (updateUserSel) {
@@ -206,9 +211,8 @@ public class Main {
                             }
                             break;
                         }
-                        System.out.println();
-                        System.out.println("=============== 변경되었습니다. ===============");
-                        System.out.println("유저 이름 : " + user.getName());
+                        uDao.updateUser(user);
+                        System.out.println("○●○●○●○●○●○●변경되었습니다.○●○●○●○●○●○●");
                         continue;
                     case 3:
                     case 4:
@@ -243,10 +247,21 @@ public class Main {
                         }
                     case 5:
                     case 6:
-                        System.out.println("프로그램을 종료합니다.");
                         return;
                 }
             }
         }
+        else{
+            while(true){
+                System.out.print("[1]상담  [2]Q&A  [3]로그아웃 : ");
+                int selNum = sc.nextInt();
+                sc.nextLine();
+                switch (selNum) {
+                    case 1:
+                    case 2:
+                        }
+                        break;
+                }
+            }
     }
 }
