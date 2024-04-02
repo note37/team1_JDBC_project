@@ -267,16 +267,14 @@ public class Main {
                         switch (num){
                             case 1:
                                 System.out.println("===== 상담 예약 =====");
-                                System.out.println("신청자 이름 : ");
-                                String name = sc.next();
                                 System.out.println("원하시는 방문 상담 날짜를 입력해 주세요 : ");
                                 String enrDate = sc.next();
-                                System.out.println("신청자 전화번호 : ");
-                                String phoneNumber = sc.next();
                                 System.out.println("문의 내용 : ");
                                 String txt = sc.next();
+                                if (isUser == 1){
+                                    int enrRst = enrDao.insertEnr(user, enrDate, txt);
+                                }
 
-                                enrDao.insertEnr()
 
                             case 2:
                                 System.out.println("===== 상담 예약 취소 =====");
