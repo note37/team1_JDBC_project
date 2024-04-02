@@ -49,7 +49,7 @@ public List<QAVo> questionSelect() throws SQLException{
         return rst;
 
     }
-    public void deleteQA(String id) throws SQLException {
+    public void deleteQA(String id, String question) throws SQLException {
         try {
             conn = DbConn.getConnection();
             String deleteSql = "DELETE FROM QAUSER WHERE ID = ? AND QUESTION = ?";
@@ -62,8 +62,8 @@ public List<QAVo> questionSelect() throws SQLException{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            Dbconn.close(pstmt);
-            Dbconn.close(conn);
+            DbConn.close(pstmt);
+            DbConn.close(conn);
         }
     }
 
