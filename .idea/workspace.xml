@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69d9d8ae-8774-484e-8055-e5907118bba0" name="Changes" comment="상담 deo(delete)구현">
+    <list default="true" id="69d9d8ae-8774-484e-8055-e5907118bba0" name="Changes" comment="main에 상담 붙히기">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JdbcProject/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/JdbcProject/src/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,7 +117,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712043585220</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="main에 상담 붙히기">
+      <option name="closed" value="true" />
+      <created>1712046242858</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1712046242858</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,7 +146,8 @@
     <MESSAGE value="수강신청 패키지 생성" />
     <MESSAGE value="수강신청 vo,deo(select)구현" />
     <MESSAGE value="상담 deo(delete)구현" />
-    <option name="LAST_COMMIT_MESSAGE" value="상담 deo(delete)구현" />
+    <MESSAGE value="main에 상담 붙히기" />
+    <option name="LAST_COMMIT_MESSAGE" value="main에 상담 붙히기" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

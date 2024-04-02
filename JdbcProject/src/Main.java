@@ -155,10 +155,26 @@ public class Main {
                         System.out.println();
                         continue;
                     case 2:
-                        System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
-                        List<QAVo> qaList = qaDao.questionSelect();
-                        for(QAVo qa : qaList) System.out.println((i++) + ". ID : "+qa.getId() + "  질문 내용 : "+qa.getQuestion());
-                        System.out.println();
+                        System.out.print("[1]회원 질문 보기  [2]비회원 질문 보기  : ");
+                        String qaSel = sc.nextLine();
+                        if(qaSel.equals("1")) { //회원 질문 답변
+                            while(true) {
+                                System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요.(나가기 : q) ==========");
+                                String isQuit = sc.nextLine().toLowerCase();
+                                if(isQuit.equals("q")) break;
+                                List<QAVo> qaList = qaDao.questionSelect();
+                                for (QAVo qa : qaList)
+                                    System.out.println((i++) + ". ID : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
+                                System.out.println();
+
+                            }
+                        }else if(qaSel.equals("2")) { // 비회원 질문 답변
+                            while(true) {
+                                System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요.(나가기 : q) ==========");
+                                String isQuit = sc.nextLine().toLowerCase();
+                                if(isQuit.equals("q")) break;
+                            }
+                        }
                         continue;
                     case 3:
                         break;
@@ -259,6 +275,8 @@ public class Main {
                                 String phoneNumber = sc.next();
                                 System.out.println("문의 내용 : ");
                                 String txt = sc.next();
+
+                                enrDao.insertEnr()
 
                             case 2:
                                 System.out.println("===== 상담 예약 취소 =====");
