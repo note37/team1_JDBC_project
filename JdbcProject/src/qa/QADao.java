@@ -18,7 +18,7 @@ public List<QAVo> questionSelect() throws SQLException{
     try {
         conn = DbConn.getConnection();
         stmt = conn.createStatement();
-        String sql = "SELECT * FROM QAUSER";
+        String sql = "SELECT * FROM QAUSER WHERE ANSWER IS NULL";
         rs = stmt.executeQuery(sql);
 
         while (rs.next()) {
@@ -49,6 +49,24 @@ public List<QAVo> questionSelect() throws SQLException{
         return rst;
 
     }
+    public void deleteQA(String id) throws SQLException {
+        try {
+            conn = DbConn.getConnection();
+            String deleteSql = "DELETE FROM QAUSER WHERE ID = ? AND QUESTION = ?";
+            pstmt = conn.prepareStatement(deleteSql);
+            pstmt.setString(1, id);
+            pstmt.setString(2, question);
+
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Dbconn.close(pstmt);
+            Dbconn.close(conn);
+        }
+    }
+
 
 }
 
