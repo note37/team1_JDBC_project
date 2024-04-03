@@ -159,14 +159,16 @@ public class ClassDao {
         return appliedClasses;
     }
 
-    public void printAppliedClasses(List<ApplyVo> appliedClasses) {
+    public int printAppliedClasses(List<ApplyVo> appliedClasses) {
         int i =1;
         if (appliedClasses.isEmpty()) {
             System.out.println("신청한 수업이 없습니다.");
+            return 1;
         } else {
             for (ApplyVo e : appliedClasses) {
                 System.out.println((i++) + "- " + e.getTITLE() + " (" + e.getROOM() + ")");
             }
+            return 0;
         }
     }
 

@@ -302,13 +302,13 @@ public class Main {
                                 case 2:
                                     System.out.println("\n현재 " + user.getName() + "님이 신청한 수업 목록입니다.");
                                     List<ApplyVo> appliedClasses = dao.getAppliedClasses(user.getId());
-                                    dao.printAppliedClasses(appliedClasses);
-                                    System.out.print("취소하실 수업의 번호를 입력하세요 : ");
-                                    int askAgain = sc.nextInt();
-
-                                    dao.cancelAllAppliedClasses(appliedClasses.get(askAgain-1));
-                                    System.out.println("취소가 완료되었습니다.");
-
+                                    int isAc = dao.printAppliedClasses(appliedClasses);
+                                    if(isAc == 0){
+                                        System.out.print("취소하실 수업의 번호를 입력하세요 : ");
+                                        int askAgain = sc.nextInt();
+                                        dao.cancelAllAppliedClasses(appliedClasses.get(askAgain - 1));
+                                        System.out.println("취소가 완료되었습니다.");
+                                    }
                                     continue;
 
                                 case 3:
