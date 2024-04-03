@@ -286,7 +286,7 @@ public class Main {
                     case 4:
                         while (true) {
                             System.out.println("\n☆★☆★☆★☆★KH정보교육원 수강 신청 메뉴☆★☆★☆★☆★\n");
-                            System.out.print("메뉴 선택 : [1]수강신청 [2]수강 취소 [3]나의 수강신청 조회 [4]나가기 : ");
+                            System.out.print("메뉴 선택 : [1]수강 신청 [2]수강 취소 [3]나의 수강신청 조회 [4]나가기 : ");
                             int sel = sc.nextInt();
                             switch (sel) {
                                 case 1:
@@ -303,7 +303,7 @@ public class Main {
                                     System.out.println("\n현재 " + user.getName() + "님이 신청한 수업 목록입니다.");
                                     List<ApplyVo> appliedClasses = dao.getAppliedClasses(user.getId());
                                     dao.printAppliedClasses(appliedClasses);
-                                    System.out.print("취소하실 강의에 번호를 입력하세요 : ");
+                                    System.out.print("취소하실 강의의 번호를 입력하세요 : ");
                                     int askAgain = sc.nextInt();
 
                                     dao.cancelAllAppliedClasses(appliedClasses.get(askAgain-1));
