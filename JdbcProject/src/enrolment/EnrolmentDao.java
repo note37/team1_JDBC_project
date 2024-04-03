@@ -12,14 +12,6 @@ import java.util.Scanner;
 
 public class EnrolmentDao {
     public static void main(String[] args) throws SQLException {
-        EnrolmentDao dao = new EnrolmentDao();
-        List<EnrolmentVo> list = dao.allEnrList();
-        for(EnrolmentVo ev : list){
-            System.out.println("[이름 : " + ev.getName()+"]" +
-                    "[예약 날짜 : " + ev.getDate() + "]" +
-                    "[전화 번호 : " + ev.getPhoneNumber() + "]" +
-                    "[문의 내용 : " + ev.getInquiry() + "]");
-        }
     }
     Connection conn = null; // db 연결
     Statement stmt = null; // 자바에서 쿼리 실행
@@ -52,8 +44,14 @@ public class EnrolmentDao {
     public int insertEnr(User user, String date, String txt) throws SQLException {
         conn = DbConn.getConnection();
         String q;
-        // 로그인 상태인 경우
-        q = "INSERT INTO YourTableName (NAME,  ENRDATE, INQUIRY, ID) VALUES (?, ?, ?, ?)";
+        q = "SELECT * FROM ENROLMENT WHERE ENRDATE = ?";
+        pStmt = conn.prepareStatement(q);
+        pStmt.setString(1, date);
+        rs = pStmt.executeQuery();
+        if (rs.next()){
+            return 0;
+        }
+        q = "INSERT INTO enrolment(NAME,  ENRDATE, INQUIRY, ID) VALUES (?, ?, ?, ?)";
         pStmt = conn.prepareStatement(q);
         // 여기서 ?에 해당하는 값들을 설정
         pStmt.setString(1,user.getName() );
@@ -68,8 +66,15 @@ public class EnrolmentDao {
     public int insertEnr(NotUser notUser,String date, String txt ) throws SQLException {
         conn = DbConn.getConnection();
         String q;
+        q = "SELECT * FROM ENROLMENT WHERE ENRDATE = ?";
+        pStmt = conn.prepareStatement(q);
+        pStmt.setString(1, date);
+        rs = pStmt.executeQuery();
+        if (rs.next()){
+            return 0;
+        }
         // 비로그인 상태인 경우
-        q = "INSERT INTO YourTableName (NAME, ENRDATE, PHONENUMBER, INQUIRY) VALUES (?, ?, ?, ?)";
+        q = "INSERT INTO enrolment(NAME, ENRDATE, PHONENUMBER, INQUIRY) VALUES (?, ?, ?, ?)";
         pStmt = conn.prepareStatement(q);
         // 여기서 ?에 해당하는 값들을 설정
         pStmt.setString(1, notUser.getName());

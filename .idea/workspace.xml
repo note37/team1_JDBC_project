@@ -4,8 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69d9d8ae-8774-484e-8055-e5907118bba0" name="Changes" comment="운영자 루틴 구성">
+    <list default="true" id="69d9d8ae-8774-484e-8055-e5907118bba0" name="Changes" comment="회원 상담 신청 초안">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JdbcProject/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/JdbcProject/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JdbcProject/src/dbconn/DbConn.java" beforeDir="false" afterPath="$PROJECT_DIR$/JdbcProject/src/dbconn/DbConn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JdbcProject/src/enrolment/EnrolmentDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/JdbcProject/src/enrolment/EnrolmentDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/cls/ClassDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/cls/ClassDao.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/cls/ClassVo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/cls/ClassVo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/dbconn/DbConn.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/dbconn/DbConn.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/qa/UserQA.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/qa/UserQA.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/user/NotUserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/user/NotUserDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/javaDB/user/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/javaDB/user/UserDAO.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,12 +32,12 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "hojunahn"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;hojunahn&quot;
   }
-}]]></component>
+}</component>
   <component name="GithubPullRequestsUISettings">
     <option name="selectedUrlAndAccountId">
       <UrlAndAccount>
@@ -47,26 +57,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Enrolment.executor": "Run",
-    "Application.EnrolmentDao.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/project/javaDB/JdbcProject/src",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Enrolment.executor&quot;: &quot;Run&quot;,
+    &quot;Application.EnrolmentDao.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/project/javaDB/JdbcProject/src&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\project\javaDB\JdbcProject\src" />
@@ -132,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712047531902</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="회원 상담 신청 초안">
+      <option name="closed" value="true" />
+      <created>1712047853259</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1712047853259</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -155,7 +174,8 @@
     <MESSAGE value="상담 deo(delete)구현" />
     <MESSAGE value="main에 상담 붙히기" />
     <MESSAGE value="운영자 루틴 구성" />
-    <option name="LAST_COMMIT_MESSAGE" value="운영자 루틴 구성" />
+    <MESSAGE value="회원 상담 신청 초안" />
+    <option name="LAST_COMMIT_MESSAGE" value="회원 상담 신청 초안" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

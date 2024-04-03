@@ -10,7 +10,7 @@ public class DbConn {
 
     static String ORACLE_URL = "jdbc:oracle:thin:@192.168.10.17:1521:xe";
     final static String ORACLE_ID = "acos";
-    final static String ORACLE_PW = "1234";
+    final static String ORACLE_PW = "teamone";
     final static String ORACLE_DRV = "oracle.jdbc.driver.OracleDriver";
 
     public static Connection getConnection() {

@@ -155,26 +155,10 @@ public class Main {
                         System.out.println();
                         continue;
                     case 2:
-                        System.out.print("[1]회원 질문 보기  [2]비회원 질문 보기  : ");
-                        String qaSel = sc.nextLine();
-                        if(qaSel.equals("1")) { //회원 질문 답변
-                            while(true) {
-                                System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요.(나가기 : q) ==========");
-                                String isQuit = sc.nextLine().toLowerCase();
-                                if(isQuit.equals("q")) break;
-                                List<QAVo> qaList = qaDao.questionSelect();
-                                for (QAVo qa : qaList)
-                                    System.out.println((i++) + ". ID : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
-                                System.out.println();
-
-                            }
-                        }else if(qaSel.equals("2")) { // 비회원 질문 답변
-                            while(true) {
-                                System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요.(나가기 : q) ==========");
-                                String isQuit = sc.nextLine().toLowerCase();
-                                if(isQuit.equals("q")) break;
-                            }
-                        }
+                        System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
+                        List<QAVo> qaList = qaDao.questionSelect();
+                        for(QAVo qa : qaList) System.out.println((i++) + ". ID : "+qa.getId() + "  질문 내용 : "+qa.getQuestion());
+                        System.out.println();
                         continue;
                     case 3:
                         break;
@@ -261,28 +245,137 @@ public class Main {
                         continue;
                     case 3:
                         while (true){
-                        System.out.println("=============== 방문 상담 예약 ===============");
-                        System.out.print("[1] : 상담 예약\n[2] : 상담 취소\n [3] : 상담 조회\n [4] : 나가기");
-                        int num = sc.nextInt();
-                        switch (num){
-                            case 1:
-                                System.out.println("===== 상담 예약 =====");
-                                System.out.println("원하시는 방문 상담 날짜를 입력해 주세요 : ");
-                                String enrDate = sc.next();
-                                System.out.println("문의 내용 : ");
-                                String txt = sc.next();
-                                if (isUser == 1){
-                                    int enrRst = enrDao.insertEnr(user, enrDate, txt);
-                                }
+                            System.out.println("=============== 방문 상담 예약 ===============");
+                            System.out.print("[1]: 상담 예약  [2]: 상담 취소  [3]: 상담 조회  [4]: 나가기  :  ");
+                            String num = sc.nextLine();
+                            switch (num){
+                                case "1":
+                                    System.out.println("===== 상담 예약 =====");
+                                    System.out.println("원하시는 방문 상담 날짜의 년도 입력(24/25): ");
+                                    String yearStr = sc.nextLine();
+                                    switch (yearStr){
+                                        case "24":
+                                            break;
+                                        case "25":
+                                            break;
+                                        default:
+                                            System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                            continue;
+                                    }
+                                    System.out.println("원하시는 방문 상담 날짜의 월 입력: ");
+                                    String monthStr = sc.nextLine();
+                                    switch (monthStr){
+                                        case "1":
+                                            monthStr = "01";
+                                            break;
+                                        case "2":
+                                            monthStr = "02";
+                                            break;
+                                        case "3":
+                                            monthStr = "03";
+                                            break;
+                                        case "4":
+                                            monthStr = "04";
+                                            break;
+                                        case "5":
+                                            monthStr = "05";
+                                            break;
+                                        case "6":
+                                            monthStr = "06";
+                                            break;
+                                        case "7":
+                                            monthStr = "07";
+                                            break;
+                                        case "8":
+                                            monthStr = "08";
+                                            break;
+                                        case "9":
+                                            monthStr = "09";
+                                            break;
+                                        case "10":
+                                            monthStr = "10";
+                                            break;
+                                        case "11":
+                                            monthStr = "11";
+                                            break;
+                                        case "12":
+                                            monthStr = "12";
+                                            break;
+                                        default:
+                                            System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                            continue;
+                                    }
+                                    System.out.println("원하시는 방문 상담 날짜의 일 입력: ");
+                                    String dayStr = sc.nextLine();
+                                    int day = Integer.parseInt(dayStr);
+                                    if (day<1 || day>31){
+                                        System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                        continue;
+                                    }
+                                    System.out.println("원하시는 방문 상담 시간 입력(11시/13시/15시) : ");
+                                    String selectedTime = sc.nextLine();
+                                    switch (selectedTime){
+                                        case "11":
+                                            break;
+                                        case "13":
+                                            break;
+                                        case "15":
+                                            break;
+                                        default:
+                                            System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                            continue;
+                                    }
+                                    String enrTime = yearStr + "/" + monthStr + "/" + dayStr + "/" + selectedTime;
 
-
-                            case 2:
-                                System.out.println("===== 상담 예약 취소 =====");
-                                System.out.println("예약하신 이름 : ");
-                            case 3:
-                            case 4:
+                                    System.out.println("문의 내용 입력 : ");
+                                    String txt = sc.nextLine();
+                                    if (txt.length()>50){
+                                        System.out.println("50자 이내로 입력해 주세요.");
+                                        continue;
+                                    }
+                                    if (isUser == 1){
+                                        int enrRst = enrDao.insertEnr(user, enrTime, txt);
+                                        if (enrRst == 1) System.out.println("회원 상담 예약이 완료 되었습니다.");
+                                        else System.out.println("이미 예약된 날짜입니다.");
+                                    } else if (isUser == 0) {
+                                        int enrRst = enrDao.insertEnr(nUser, enrTime, txt);
+                                        if (enrRst == 1) System.out.println("비회원 상담 예약이 완료 되었습니다.");
+                                        else System.out.println("이미 예약된 날짜입니다.");
+                                    }else {
+                                        System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                        continue;
+                                    }
+                                    break;
+                                case "2":
+                                    System.out.println("===== 상담 예약 취소 =====");
+                                    System.out.print("취소 날짜 입력 (입력 예시 -> 24/04/3/11 )  :  ");
+                                    String inputDate = sc.nextLine();
+                                    if (isUser == 0){
+                                        int cancelRst = enrDao.deleteEnr(nUser,inputDate);
+                                        if(cancelRst != 1) System.out.println("해당 날짜에 예약된 상담이 없습니다.");
+                                        else System.out.println("상담이 취소되었습니다.");
+                                    }else {
+                                        int cancelRst = enrDao.deleteEnr(user,inputDate);
+                                        if(cancelRst != 1) System.out.println("해당 날짜에 예약된 상담이 없습니다.");
+                                        else System.out.println("상담이 취소되었습니다.");
+                                    }
+                                    continue;
+                                case "3":
+                                    System.out.println("===== 상담 예약 조회 =====");
+                                    System.out.println("현재 상담 예약을 조회합니다.");
+                                    EnrolmentDao dao = new EnrolmentDao();
+                                    List<EnrolmentVo> list = dao.allEnrList();
+                                    for(EnrolmentVo ev : list){
+                                        System.out.println("[이름 : " + ev.getName()+"]" +
+                                                "[예약 날짜 : " + ev.getDate() + "]" +
+                                                "[전화 번호 : " + ev.getPhoneNumber() + "]" +
+                                                "[문의 내용 : " + ev.getInquiry() + "]");
+                                    }continue;
+                                case "4":
+                                    System.out.println("프로그램을 종료합니다.");
+                                    return;
+                            }
                         }
-                    }
                     case 4:
                         while (true) {
                             System.out.println("\n☆★☆★☆★☆★KH정보교육원 수강 신청 메뉴☆★☆★☆★☆★\n");
