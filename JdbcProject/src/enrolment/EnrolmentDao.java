@@ -18,11 +18,41 @@ public class EnrolmentDao {
     PreparedStatement pStmt = null; // 위에 놈 상속/상위호환
     ResultSet rs = null; // 딕셔너리 같은 역할을 하는 그릇
 
-    public List<EnrolmentVo> allEnrList() throws SQLException {
+    public List<EnrolmentVo> allEnrList(User user) throws SQLException {
         List<EnrolmentVo> list = new ArrayList<>();
         conn = DbConn.getConnection();
-        String q = "SELECT * FROM ENROLMENT ORDER BY enrdate";
+        String q;
+        if(user.getId().equals("master")){
+            q = "SELECT * FROM ENROLMENT ORDER BY enrdate";
+            pStmt = conn.prepareStatement(q);
+        }else {
+            q = "SELECT * FROM ENROLMENT WHERE id = ? ORDER BY enrdate ";
+            pStmt = conn.prepareStatement(q);
+            pStmt.setString(1, user.getId());
+        }
+        rs = pStmt.executeQuery();
+
+        while (rs.next()){
+            String name = rs.getString("name");
+            String date = rs.getString("ENRDATE");
+            String phoneNumber = rs.getString("phonenumber");
+            String inquiry = rs.getString("inquiry");
+            String id = rs.getString("id");
+            EnrolmentVo ev = new EnrolmentVo(name,date,phoneNumber,inquiry,id);
+
+            list.add(ev);
+        }
+        DbConn.close(rs);
+        DbConn.close(pStmt);
+        DbConn.close(conn);
+        return list;
+    }
+    public List<EnrolmentVo> allEnrList(NotUser nUser) throws SQLException {
+        List<EnrolmentVo> list = new ArrayList<>();
+        conn = DbConn.getConnection();
+        String q = "SELECT * FROM ENROLMENT WHERE phonenumber = ? ORDER BY enrdate";
         pStmt = conn.prepareStatement(q);
+        pStmt.setString(1,nUser.getPhoneNumber());
         rs = pStmt.executeQuery();
 
         while (rs.next()){

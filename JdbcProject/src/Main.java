@@ -145,24 +145,28 @@ public class Main {
             // 운영자 계정일 때
             while(true) {
                 System.out.print("[1]상담 확인 [2]Q&A 확인 [3]로그아웃 : ");
-                int selNum = sc.nextInt();
-                sc.nextLine();
+                String selNum = sc.nextLine();
                 int i = 1;
+                try {
+
                 switch (selNum) {
-                    case 1:
-                        List<EnrolmentVo> enrList = enrDao.allEnrList();
+                    case "1":
+                        List<EnrolmentVo> enrList = enrDao.allEnrList(user);
                         for (EnrolmentVo ev : enrList) System.out.println((i++)+ ". 이름 : "+ev.getName()+"  시간 : "+ev.getDate());
                         System.out.println();
                         continue;
-                    case 2:
+                    case "2":
                         System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
                         List<QAVo> qaList = qaDao.questionSelect();
                         for(QAVo qa : qaList) System.out.println((i++) + ". ID : "+qa.getId() + "  질문 내용 : "+qa.getQuestion());
                         System.out.println();
                         continue;
-                    case 3:
+                    case "3":
                         break;
 
+                }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
                 break;
             }
@@ -363,8 +367,12 @@ public class Main {
                                 case "3":
                                     System.out.println("===== 상담 예약 조회 =====");
                                     System.out.println("현재 상담 예약을 조회합니다.");
-                                    EnrolmentDao dao = new EnrolmentDao();
-                                    List<EnrolmentVo> list = dao.allEnrList();
+                                    List<EnrolmentVo> list;
+                                    if(isUser == 1 ){
+                                        list = enrDao.allEnrList(user);
+                                    }else {
+                                        list = enrDao.allEnrList(nUser);
+                                    }
                                     for(EnrolmentVo ev : list){
                                         System.out.println("[이름 : " + ev.getName()+"]" +
                                                 "[예약 날짜 : " + ev.getDate() + "]" +
