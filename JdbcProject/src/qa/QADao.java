@@ -66,44 +66,46 @@ public class QADao {
     }
 
     public List<QAVo> loadQA(User user) throws SQLException {
-        String rrs = null;
         Connection conn = null;
         Statement stmt = null;
         ResultSet rs = null;
         List<QAVo> qaList = new ArrayList<QAVo>();
+        String q;
         try {
             conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.10.17:1521:xe", "acos", "teamone");
             stmt = conn.createStatement();
-            //아이디가 master면 where을 주지말고 그게 아니면 아래 where절 넣어서
-            String q;
             if (user.getId().equals("master")) {
-                q = "SELECT * from qatb WHERE answer is null";
+                q = "SELECT * from QATB WHERE answer is null";
             } else {
-                q = "SELECT * from qatb WHERE id = '" + user.getId() + "'";
+                q = "SELECT * from QATB WHERE id = '" + user.getId() + "'";
             }
             rs = stmt.executeQuery(q);
-                if(user.getId().equals("master")) {
-                    while(rs.next()) {
-                        QAVo qvo;
-                        if(rs.getString("id").equals(""))
-                            qvo = new QAVo(rs.getString("phonenumber"), rs.getString("question"), "");
-                        else qvo = new QAVo(rs.getString("id"), rs.getString("question"), "");
-                        qaList.add(qvo);
-                    }
-                } else {
-                    while(rs.next()) {
-                        QAVo qvo = new QAVo(rs.getString("id"), rs.getString("question"),rs.getString("answer"));
-                        qaList.add(qvo);
-                    }
+            if(user.getId().equals("master")) {
+                while(rs.next()) {
+                    QAVo qvo;
+                    String isIdNull = rs.getString("id");
+                    if(isIdNull == null) qvo = new QAVo(rs.getString("phonenumber"), rs.getString("question"), "");
+                    else qvo = new QAVo(rs.getString("id"), rs.getString("question"), "");
+                    qaList.add(qvo);
                 }
-        } catch (Exception e) {
+            } else {
+                while(rs.next()) {
+                    QAVo qvo = new QAVo(rs.getString("id"), rs.getString("question"),rs.getString("answer"));
+                    qaList.add(qvo);
+                }
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
-        DbConn.close(rs);
-        DbConn.close(stmt);
-        DbConn.close(conn);
+        finally {
+            // Finally block to ensure resources are closed
+            DbConn.close(rs);
+            DbConn.close(stmt);
+            DbConn.close(conn);
+        }
         return qaList;
     }
+
 
     public List<QAVo> loadQA(NotUser nUser) throws SQLException {
         String rrs = null;
@@ -134,7 +136,7 @@ public class QADao {
         Connection conn = DbConn.getConnection();
         PreparedStatement pstmt;
         String q;
-        if(!qav.getId().equals("")) {
+        if(qav.getId()!=null) {
             q = "UPDATE qatb SET answer = ? WHERE id = ? AND question = ?";
             pstmt = conn.prepareStatement(q);
             pstmt.setString(1,qav.getAnswer());

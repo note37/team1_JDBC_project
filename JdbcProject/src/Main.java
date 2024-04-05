@@ -137,6 +137,7 @@ public class Main {
                 }
             }
             catch (Exception e){
+                e.printStackTrace();
                 System.out.println("잘못 입력하셨습니다. 다시 입력해 주세요.");
             }
         }
@@ -151,8 +152,6 @@ public class Main {
                 System.out.print("[1]상담 확인 [2]Q&A 확인 [3]로그아웃 : ");
                 String selNum = sc.nextLine();
                 int i = 1;
-                try {
-
                 switch (selNum) {
                     case "1":
                         List<EnrolmentVo> enrList = enrDao.allEnrList(user);
@@ -160,10 +159,14 @@ public class Main {
                         System.out.println();
                         continue;
                     case "2":
-                        System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
                         List<QAVo> qaList = qaDao.loadQA(user);
+                        if(qaList.size() == 0 ) {
+                            System.out.println("질문 없음");
+                            continue;
+                        }
+                        System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
                         for(QAVo qa : qaList) {
-                            if(!qa.getId().equals("")) System.out.println((i++) + ". ID : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
+                            if(qa.getId()!=null) System.out.println((i++) + ". ID : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
                             else System.out.println((i++) + ". phoneNumber : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
                         }
                         System.out.println();
@@ -179,10 +182,6 @@ public class Main {
                         continue;
                     case "3":
                         break;
-
-                }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
                 break;
             }
