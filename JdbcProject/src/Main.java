@@ -167,7 +167,7 @@ public class Main {
                         System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
                         for(QAVo qa : qaList) {
                             if(qa.getId()!=null) System.out.println((i++) + ". ID : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
-                            else System.out.println((i++) + ". phoneNumber : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
+                            else System.out.println((i++) + ". phoneNumber : " + qa.getPhonenumber() + "  질문 내용 : " + qa.getQuestion());
                         }
                         System.out.println();
                         System.out.print("답변 달 번호 : ");
