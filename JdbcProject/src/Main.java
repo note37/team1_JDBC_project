@@ -1,18 +1,19 @@
 import cls.ApplyVo;
 import cls.ClassDao;
 import cls.ClassVo;
-import dbconn.DbConn;
 import enrolment.EnrolmentDao;
 import enrolment.EnrolmentVo;
-import qa.QADao;
 import qa.QAVo;
+import qa.QADao;
 import user.NotUser;
 import user.NotUserDAO;
 import user.User;
 import user.UserDAO;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,7 +28,10 @@ public class Main {
     static NotUserDAO nuDao = new NotUserDAO();
     static EnrolmentDao enrDao = new EnrolmentDao();
     static QADao qaDao = new QADao();
+
+
     static String name;
+
     public static void main(String[] args) throws SQLException {
         while(true) {
             try {
@@ -157,9 +161,21 @@ public class Main {
                         continue;
                     case "2":
                         System.out.println("========== 질문 목록을 보고 답변을 달 번호를 선택해 주세요. ==========");
-                        List<QAVo> qaList = qaDao.questionSelect();
-                        for(QAVo qa : qaList) System.out.println((i++) + ". ID : "+qa.getId() + "  질문 내용 : "+qa.getQuestion());
+                        List<QAVo> qaList = qaDao.loadQA(user);
+                        for(QAVo qa : qaList) {
+                            if(!qa.getId().equals("")) System.out.println((i++) + ". ID : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
+                            else System.out.println((i++) + ". phoneNumber : " + qa.getId() + "  질문 내용 : " + qa.getQuestion());
+                        }
                         System.out.println();
+                        System.out.print("답변 달 번호 : ");
+                        String answerSel = sc.nextLine();
+                        System.out.print("답변 내용 : ");
+                        String answer = sc.nextLine();
+                        int aiSel = Integer.parseInt(answerSel)-1;
+                        QAVo selQA = qaList.get(aiSel);
+                        selQA.setAnswer(answer);
+                        if( 1 == qaDao.updateQA(selQA)) System.out.println("답변입력 완료");
+                        else System.out.println("답변 입력 오류");
                         continue;
                     case "3":
                         break;
@@ -427,6 +443,47 @@ public class Main {
                         }
                         continue;
                     case 5:
+                        // userQA.QA();
+                        while (true) {
+                            System.out.println("질문 유형을 선택하세요 : [1]자주하는 질문 [2]직접 질문 [3]질문 내역 [4]종료");
+                            String i = sc.nextLine();
+                            if (i.equals("1")) {
+                                System.out.println("[1]국비교육이란? [2]수강 신청 및 비용 [3]수강방법 및 안내 [4]수료시 취업분야 [아무 입력시 종료됩니다.]");
+                                String j = sc.nextLine();
+                                if (j.equals("1")) {
+                                    System.out.println("국비전액무료과정(국가기간전략산업훈련)은 우리나라의 중심이 되는 산업 분야에서 전문인력 양성이 필요하다고 생각되어 선정된 직종에 대하여 훈련비용을 지원함으로써 인력양성 및 관련 직종으로의 취업을 돕는 제도입니다.");
+                                } else if (j.equals("2")) {
+                                    System.out.println("수강신청은 학원의 개강일정에 맞추어 진행하시면되며 비용은 과목별로 상이합니다.");
+                                } else if (j.equals("3")) {
+                                    System.out.println("수강등록시 국비지원과정 지원서 작성 및 수강 등록을 위해 학원으로 내방하셔야하며 내일배움카드가 필요합니다.");
+                                } else if (j.equals("4")) {
+                                    System.out.println("개발자 양성과정 : JAVA 기반 웹개발자, APP 개발자, ERP/CRM 기업용 솔루션 개발자등");
+                                    System.out.println("정보보안 전문가과정 : 정보보안 엔지니어, 컨설턴트, 모의해킹전문가, 정보보안프로그램 개발자등");
+                                } else {
+                                    break;
+                                }
+                            } else if (i.equals("2")) {
+
+                                System.out.println("질문할 내용을 입력하세요 : ");
+                                String question = sc.nextLine();
+                                int rs  = qaDao.insertQA(user,question);
+                                if(rs == 1) System.out.println("질문이 저장되었습니다");
+                                else System.out.println("질문 저장 실패");
+
+                            } else if (i.equals("3")) {
+                                System.out.println("질문내역 확인");
+                                List<QAVo> qaList = qaDao.loadQA(user);
+                                for(QAVo q : qaList){
+                                    System.out.println("Question : " + q.getQuestion() + " /  Answer : " + q.getAnswer());
+                                }
+                            } else if (i.equals("4")) {
+                                System.out.println("질문을 종료합니다");
+                                break;
+                            } else {
+                                System.out.println("잘못입력했습니다. 다시 입력하세요");
+                            }
+                        }
+                        continue;
                     case 6:
                         return;
                 }
