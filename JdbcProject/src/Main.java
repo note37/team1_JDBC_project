@@ -657,7 +657,7 @@ public class Main {
                             } else if (i.equals("2")) {
                                 System.out.println("질문할 내용을 입력하세요 : ");
                                 String question = sc.nextLine();
-                                int rs  = qaDao.insertQA(user,question);
+                                int rs  = qaDao.insertQA(nUser,question);
                                 if(rs == 1) System.out.println("질문이 저장되었습니다");
                                 else System.out.println("질문 저장 실패");
 
