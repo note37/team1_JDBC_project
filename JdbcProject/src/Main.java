@@ -396,10 +396,12 @@ public class Main {
                                                 "[문의 내용 : " + ev.getInquiry() + "]");
                                     }continue;
                                 case "4":
-                                    System.out.println("프로그램을 종료합니다.");
-                                    return;
+                                    System.out.println("상담 종료합니다.");
+                                    break;
                             }
+                            break;
                         }
+                        continue;
                     case 4:
                         while (true) {
                             System.out.println("\n☆★☆★☆★☆★KH정보교육원 수강 신청 메뉴☆★☆★☆★☆★\n");
@@ -492,11 +494,189 @@ public class Main {
         else{
             while(true){
                 System.out.print("[1]상담  [2]Q&A  [3]로그아웃 : ");
-                int selNum = sc.nextInt();
-                sc.nextLine();
+                String selNum = sc.nextLine();
                 switch (selNum) {
-                    case 1:
-                    case 2:
+                    case "1":
+                        while (true){
+                            System.out.println("=============== 방문 상담 예약 ===============");
+                            System.out.print("[1]: 상담 예약  [2]: 상담 취소  [3]: 상담 조회  [4]: 나가기  :  ");
+                            String num = sc.nextLine();
+                            switch (num){
+                                case "1":
+                                    System.out.println("===== 상담 예약 =====");
+                                    System.out.println("원하시는 방문 상담 날짜의 년도 입력(24/25): ");
+                                    String yearStr = sc.nextLine();
+                                    switch (yearStr){
+                                        case "24":
+                                            break;
+                                        case "25":
+                                            break;
+                                        default:
+                                            System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                            continue;
+                                    }
+                                    System.out.println("원하시는 방문 상담 날짜의 월 입력: ");
+                                    String monthStr = sc.nextLine();
+                                    switch (monthStr){
+                                        case "1":
+                                            monthStr = "01";
+                                            break;
+                                        case "2":
+                                            monthStr = "02";
+                                            break;
+                                        case "3":
+                                            monthStr = "03";
+                                            break;
+                                        case "4":
+                                            monthStr = "04";
+                                            break;
+                                        case "5":
+                                            monthStr = "05";
+                                            break;
+                                        case "6":
+                                            monthStr = "06";
+                                            break;
+                                        case "7":
+                                            monthStr = "07";
+                                            break;
+                                        case "8":
+                                            monthStr = "08";
+                                            break;
+                                        case "9":
+                                            monthStr = "09";
+                                            break;
+                                        case "10":
+                                            monthStr = "10";
+                                            break;
+                                        case "11":
+                                            monthStr = "11";
+                                            break;
+                                        case "12":
+                                            monthStr = "12";
+                                            break;
+                                        default:
+                                            System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                            continue;
+                                    }
+                                    System.out.println("원하시는 방문 상담 날짜의 일 입력: ");
+                                    String dayStr = sc.nextLine();
+                                    int day = Integer.parseInt(dayStr);
+                                    if (day<1 || day>31){
+                                        System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                        continue;
+                                    }
+                                    System.out.println("원하시는 방문 상담 시간 입력(11시/13시/15시) : ");
+                                    String selectedTime = sc.nextLine();
+                                    switch (selectedTime){
+                                        case "11":
+                                            break;
+                                        case "13":
+                                            break;
+                                        case "15":
+                                            break;
+                                        default:
+                                            System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                            continue;
+                                    }
+                                    String enrTime = yearStr + "/" + monthStr + "/" + dayStr + "/" + selectedTime;
+
+                                    System.out.println("문의 내용 입력 : ");
+                                    String txt = sc.nextLine();
+                                    if (txt.length()>50){
+                                        System.out.println("50자 이내로 입력해 주세요.");
+                                        continue;
+                                    }
+                                    if (isUser == 1){
+                                        int enrRst = enrDao.insertEnr(user, enrTime, txt);
+                                        if (enrRst == 1) System.out.println("회원 상담 예약이 완료 되었습니다.");
+                                        else System.out.println("이미 예약된 날짜입니다.");
+                                    } else if (isUser == 0) {
+                                        int enrRst = enrDao.insertEnr(nUser, enrTime, txt);
+                                        if (enrRst == 1) System.out.println("비회원 상담 예약이 완료 되었습니다.");
+                                        else System.out.println("이미 예약된 날짜입니다.");
+                                    }else {
+                                        System.out.println("유효하지 않은 입력입니다. 다시 시도하세요.");
+                                        continue;
+                                    }
+                                    break;
+                                case "2":
+                                    System.out.println("===== 상담 예약 취소 =====");
+                                    System.out.print("취소 날짜 입력 (입력 예시 -> 24/04/3/11 )  :  ");
+                                    String inputDate = sc.nextLine();
+                                    if (isUser == 0){
+                                        int cancelRst = enrDao.deleteEnr(nUser,inputDate);
+                                        if(cancelRst != 1) System.out.println("해당 날짜에 예약된 상담이 없습니다.");
+                                        else System.out.println("상담이 취소되었습니다.");
+                                    }else {
+                                        int cancelRst = enrDao.deleteEnr(user,inputDate);
+                                        if(cancelRst != 1) System.out.println("해당 날짜에 예약된 상담이 없습니다.");
+                                        else System.out.println("상담이 취소되었습니다.");
+                                    }
+                                    continue;
+                                case "3":
+                                    System.out.println("===== 상담 예약 조회 =====");
+                                    System.out.println("현재 상담 예약을 조회합니다.");
+                                    List<EnrolmentVo> list;
+                                    if(isUser == 1 ){
+                                        list = enrDao.allEnrList(user);
+                                    }else {
+                                        list = enrDao.allEnrList(nUser);
+                                    }
+                                    for(EnrolmentVo ev : list){
+                                        System.out.println("[이름 : " + ev.getName()+"]" +
+                                                "[예약 날짜 : " + ev.getDate() + "]" +
+                                                "[전화 번호 : " + ev.getPhoneNumber() + "]" +
+                                                "[문의 내용 : " + ev.getInquiry() + "]");
+                                    }continue;
+                                case "4":
+                                    System.out.println("상담 종료합니다.");
+                                    break;
+                            }
+                            break;
+                        }
+                        continue;
+                    case "2":
+                        while (true) {
+                            System.out.println("질문 유형을 선택하세요 : [1]자주하는 질문 [2]직접 질문 [3]질문 내역 [4]종료");
+                            String i = sc.nextLine();
+                            if (i.equals("1")) {
+                                System.out.println("[1]국비교육이란? [2]수강 신청 및 비용 [3]수강방법 및 안내 [4]수료시 취업분야 [아무 입력시 종료됩니다.]");
+                                String j = sc.nextLine();
+                                if (j.equals("1")) {
+                                    System.out.println("국비전액무료과정(국가기간전략산업훈련)은 우리나라의 중심이 되는 산업 분야에서 전문인력 양성이 필요하다고 생각되어 선정된 직종에 대하여 훈련비용을 지원함으로써 인력양성 및 관련 직종으로의 취업을 돕는 제도입니다.");
+                                } else if (j.equals("2")) {
+                                    System.out.println("수강신청은 학원의 개강일정에 맞추어 진행하시면되며 비용은 과목별로 상이합니다.");
+                                } else if (j.equals("3")) {
+                                    System.out.println("수강등록시 국비지원과정 지원서 작성 및 수강 등록을 위해 학원으로 내방하셔야하며 내일배움카드가 필요합니다.");
+                                } else if (j.equals("4")) {
+                                    System.out.println("개발자 양성과정 : JAVA 기반 웹개발자, APP 개발자, ERP/CRM 기업용 솔루션 개발자등");
+                                    System.out.println("정보보안 전문가과정 : 정보보안 엔지니어, 컨설턴트, 모의해킹전문가, 정보보안프로그램 개발자등");
+                                } else {
+                                    break;
+                                }
+                            } else if (i.equals("2")) {
+                                System.out.println("질문할 내용을 입력하세요 : ");
+                                String question = sc.nextLine();
+                                int rs  = qaDao.insertQA(user,question);
+                                if(rs == 1) System.out.println("질문이 저장되었습니다");
+                                else System.out.println("질문 저장 실패");
+
+                            } else if (i.equals("3")) {
+                                System.out.println("질문내역 확인");
+                                List<QAVo> qaList = qaDao.loadQA(nUser);
+                                for(QAVo q : qaList){
+                                    System.out.println("Question : " + q.getQuestion() + " /  Answer : " + q.getAnswer());
+                                }
+                            } else if (i.equals("4")) {
+                                System.out.println("질문을 종료합니다");
+                                break;
+                            } else {
+                                System.out.println("잘못입력했습니다. 다시 입력하세요");
+                            }
+                        }
+                        continue;
+                    case "3":
+                        break;
                         }
                         break;
                 }
