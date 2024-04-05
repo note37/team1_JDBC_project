@@ -115,7 +115,7 @@ public class QADao {
             conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.10.17:1521:xe", "acos", "teamone");
             stmt = conn.createStatement();
             //아이디가 master면 where을 주지말고 그게 아니면 아래 where절 넣어서
-            String q = "SELECT * from qatb WHERE id = '" + nUser.getPhoneNumber()+ "'";
+            String q = "SELECT * from qatb WHERE phonenumber = '" + nUser.getPhoneNumber()+ "'";
             rs = stmt.executeQuery(q);
             while(rs.next()) {
                 QAVo qvo = new QAVo(rs.getString("phonenumber"), rs.getString("question"),rs.getString("answer"));
